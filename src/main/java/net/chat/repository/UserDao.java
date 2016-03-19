@@ -32,6 +32,5 @@ public class UserDao {
 
 	public void register(Member member) {
 		em.persist(member);
-		return;
 	}
 }
