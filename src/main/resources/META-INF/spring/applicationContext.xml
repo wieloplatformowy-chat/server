@@ -17,5 +17,4 @@
 	<context:component-scan base-package="org.jboss.tools.example.springmvc.repo"/>
 
 	<tx:annotation-driven />
-
 </beans>

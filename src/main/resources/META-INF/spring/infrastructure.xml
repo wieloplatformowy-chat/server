@@ -20,6 +20,4 @@
 	</bean>
                      
     <tx:jta-transaction-manager />
-
-	
 </beans>
