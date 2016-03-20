@@ -1,7 +1,7 @@
 package net.chat.rest;
 
-import java.util.List;
-
+import net.chat.entity.User;
+import net.chat.repository.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,22 +9,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import net.chat.entity.User;
-import net.chat.repository.UserDao;
+import java.util.List;
 
 @Controller
 @RequestMapping("/rest/users")
 public class UserRestController {
-	@Autowired
-	private UserDao userDao;
+    @Autowired
+    private UserDao userDao;
 
-	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<User> listAllMembers() {
-		return userDao.findAll();
-	}
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    public
+    @ResponseBody
+    List<User> listAllMembers() {
+        if ("".isEmpty()) throw new RuntimeException("dupa");
+        return userDao.findAll();
+    }
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody User findMemberById(@PathVariable("id") Long id) {
-		return userDao.findById(id);
-	}
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
+    public
+    @ResponseBody
+    User findMemberById(@PathVariable("id") Long id) {
+        return userDao.findById(id);
+    }
 }

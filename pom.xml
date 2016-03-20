@@ -1,5 +1,5 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>chatbackend</groupId>
 	<artifactId>chatbackend</artifactId>
@@ -13,7 +13,7 @@
 		<maven.compiler.target>1.7</maven.compiler.target>
 
 		<!-- Spring version -->
-		<version.spring>3.2.8.RELEASE</version.spring>
+        <version.spring>4.2.5.RELEASE</version.spring>
 
 		<!-- Spring Third Party dependencies -->
 		<version.aopalliance>1.0</version.aopalliance>
@@ -236,10 +236,9 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
+            <version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-
 
 		<!-- Add cglib for the MemberDaoTest -->
 		<dependency>
@@ -272,7 +271,25 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.7.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.7.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.7.3</version>
+        </dependency>
+
+        <dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.6.4</version>
@@ -284,6 +301,22 @@
 			<artifactId>guava</artifactId>
 			<version>19.0</version>
 		</dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 
 	<build>
