@@ -4,3 +4,5 @@ target
 !.settings/.jsdtscope
 .project
 .classpath
+.idea/*
+*.iml
