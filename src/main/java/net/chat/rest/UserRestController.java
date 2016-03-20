@@ -21,7 +21,6 @@ public class UserRestController {
     public
     @ResponseBody
     List<User> listAllMembers() {
-        if ("".isEmpty()) throw new RuntimeException("dupa");
         return userDao.findAll();
     }
 
