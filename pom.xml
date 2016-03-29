@@ -14,6 +14,7 @@
 
 		<!-- Spring version -->
         <version.spring>4.2.5.RELEASE</version.spring>
+        <version.springsecurity>4.0.4.RELEASE</version.springsecurity>
 
 		<!-- Spring Third Party dependencies -->
 		<version.aopalliance>1.0</version.aopalliance>
@@ -104,6 +105,16 @@
 				<artifactId>spring-webmvc</artifactId>
 				<version>${version.spring}</version>
 			</dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${version.springsecurity}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${version.springsecurity}</version>
+            </dependency>
 
 			<!-- Third Party dependencies -->
 			<dependency>
@@ -126,9 +137,9 @@
 	</dependencyManagement>
 
 	<dependencies>
-		<!-- Import the JPA API using the provided scope It is included in JBoss 
-			AS 7 / EAP 6 <dependency> <groupId>org.hibernate.javax.persistence</groupId> 
-			<artifactId>hibernate-jpa-2.0-api</artifactId> <version>4.1.0.Final</version> 
+		<!-- Import the JPA API using the provided scope It is included in JBoss
+			AS 7 / EAP 6 <dependency> <groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId> <version>4.1.0.Final</version>
 			<scope>provided</scope> </dependency> -->
 
 		<!-- JSR-303 (Bean Validation) Implementation -->
@@ -147,7 +158,7 @@
 			</exclusions>
 		</dependency>
 
-		<!-- Annotation processor that raising compilation errors whenever constraint 
+		<!-- Annotation processor that raising compilation errors whenever constraint
 			annotations are incorrectly used. -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -163,13 +174,13 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- Import Spring dependencies, these are either from community or versions 
+		<!-- Import Spring dependencies, these are either from community or versions
 			certified in WFK2 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
 		</dependency>
-		<!-- dependency> <groupId>org.springframework</groupId> <artifactId>spring-asm</artifactId> 
+		<!-- dependency> <groupId>org.springframework</groupId> <artifactId>spring-asm</artifactId>
 			</dependency -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -216,6 +227,14 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
 		</dependency>
 
 		<!-- Other community dependencies -->
@@ -320,7 +339,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>spring-eap6-quickstart</finalName>
+		<finalName>chat</finalName>
 		<plugins>
 			<!-- Force Java 6 -->
 			<plugin>
@@ -348,11 +367,11 @@
 
 	<profiles>
 		<profile>
-			<!-- When built in OpenShift the 'openshift' profile will be used when 
+			<!-- When built in OpenShift the 'openshift' profile will be used when
 				invoking mvn. -->
-			<!-- Use this profile for any OpenShift specific customization your app 
+			<!-- Use this profile for any OpenShift specific customization your app
 				will need. -->
-			<!-- By default that is to put the resulting archive into the 'deployments' 
+			<!-- By default that is to put the resulting archive into the 'deployments'
 				folder. -->
 			<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
 			<id>openshift</id>

@@ -7,7 +7,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "name"))
-@NamedQueries({@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"), @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name")})
+@NamedQueries({@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
+        @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name")})
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
