@@ -1,14 +1,15 @@
 <HTML>
 <HEAD>
 	<TITLE>JBossAS7 JSP snoop page</TITLE>
-	<%@ page import="javax.servlet.http.HttpUtils,java.util.Enumeration" %>
-	<%@ page import="java.lang.management.*" %>
-	<%@ page import="java.util.*" %>
+	<%@ page import="javax.servlet.http.HttpUtils,java.lang.management.ManagementFactory" %>
+	<%@ page import="java.lang.management.MemoryPoolMXBean" %>
+	<%@ page import="java.util.Enumeration" %>
+    <%@ page import="java.util.Iterator" %>
 </HEAD>
 <BODY>
 
 <H1>WebApp JSP Snoop page</H1>
-<img src="images/jbosscorp_logo.png">
+<%--<img src="images/jbosscorp_logo.png">--%>
 
 <h2>JVM Memory Monitor</h2>
  
