@@ -1,8 +1,11 @@
 package net.chat.logging;
 
+import net.chat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * @author Mariusz Gorzycki
@@ -13,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class LogService {
     @Autowired
     LogDao logDao;
+
+    @Autowired
+    UserService userService;
 
     public void debug(String message){
         LogEntity log = prepareLog(message).setPriority(LogPriority.DEBUG);
@@ -35,7 +41,19 @@ public class LogService {
     }
 
     private LogEntity prepareLog(String message){
-        return LogEntity.withCurrentDate().setUserId(findUserId()).setMessage(message);
+        return LogEntity.withCurrentDate().setUserId(findUserId()).setUserIp(findUserIp()).setMessage(message);
+    }
+
+    private String findUserIp() {
+        String remoteAddress = null;
+
+        try {
+             remoteAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
+        }catch (Exception e){
+
+        }
+
+        return remoteAddress;
     }
 
     private void dispatchLog(LogEntity logEntity){
@@ -44,6 +62,14 @@ public class LogService {
     }
 
     private Long findUserId(){
-        return null;
+        Long userId = null;
+
+        try {
+            userId = userService.getLoggedUser().getId();
+        }catch (Exception e){
+
+        }
+
+        return userId;
     }
 }
