@@ -1,12 +1,12 @@
 package net.chat.repository;
 
 import net.chat.entity.User;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-//@Transactional
+@Transactional
 @Repository
 public class UserDao extends BaseDao<User>{
 
@@ -23,7 +23,7 @@ public class UserDao extends BaseDao<User>{
     }
 
     @SuppressWarnings("unchecked")
-    @PostAuthorize("hasRole('ROLE_ADMIN')")
+//    @PostAuthorize("hasRole('ROLE_ADMIN')")
     public List<User> findAll() {
         return getEm().createNamedQuery("User.findAll").getResultList();
     }
