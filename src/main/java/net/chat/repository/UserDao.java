@@ -23,7 +23,6 @@ public class UserDao extends BaseDao<User>{
     }
 
     @SuppressWarnings("unchecked")
-//    @PostAuthorize("hasRole('ROLE_ADMIN')")
     public List<User> findAll() {
         return getEm().createNamedQuery("User.findAll").getResultList();
     }

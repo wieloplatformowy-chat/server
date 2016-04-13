@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
@@ -46,20 +47,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//
-//                .csrf().disable()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-//                .authorizeRequests()
-//                .antMatchers("/signup","/about", "/swagger-ui.html", "/index", "/", "/v2/api-docs").permitAll() // #4
-//                .antMatchers("/static/*", "/resources/*").permitAll() // #4
-////                .antMatchers("/rest/*").hasRole("ADMIN") // #6
-//                .antMatchers("/test/**").access("hasRole('ROLE_ADMIN')") // #6
-//                .anyRequest().authenticated() // 7
-//                .and()
-//                .formLogin()
-//                .permitAll()
-//                .and().logout().permitAll();
+        http
+
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests()
+                .antMatchers("/signup","/about", "/swagger-ui.html", "/index", "/", "/v2/api-docs").permitAll() // #4
+                .antMatchers("/static/*", "/resources/*").permitAll() // #4
+//                .antMatchers("/rest/*").hasRole("ADMIN") // #6
+                .antMatchers("/test/**").access("hasRole('ROLE_ADMIN')") // #6
+                .anyRequest().authenticated() // 7
+                .and()
+                .formLogin()
+                .permitAll()
+                .and().logout().permitAll();
 
 
 //        http
