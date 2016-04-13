@@ -41,8 +41,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .withUser("t").password("t").roles("USER").and()
                 .withUser("a").password("a").roles("USER", "ADMIN");
 
-//        auth.authenticationProvider(passwordAuthenticationProvider);
-//        auth.authenticationProvider(tokenAuthenticationProvider);
+        auth.authenticationProvider(passwordAuthenticationProvider);
+        auth.authenticationProvider(tokenAuthenticationProvider);
     }
 
     @Override
