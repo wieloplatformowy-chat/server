@@ -1,8 +1,5 @@
 package net.chat.config;
 
-import net.chat.config.authentication.AuthenticationFilter;
-import net.chat.config.authentication.PasswordAuthenticationProvider;
-import net.chat.config.authentication.TokenAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +9,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
  * @author Mariusz Gorzycki
@@ -27,12 +22,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
-    @Autowired
-    PasswordAuthenticationProvider passwordAuthenticationProvider;
-
-    @Autowired
-    TokenAuthenticationProvider tokenAuthenticationProvider;
-
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -44,9 +33,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
                 .withUser("t").password("t").roles("USER").and()
                 .withUser("a").password("a").roles("USER", "ADMIN");
-
-        auth.authenticationProvider(passwordAuthenticationProvider);
-        auth.authenticationProvider(tokenAuthenticationProvider);
     }
 
     @Override
@@ -54,17 +40,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
 
                 .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/signup","/about", "/swagger-ui.html", "/index", "/", "/v2/api-docs").permitAll() // #4
-                .antMatchers("/static/*", "/resources/*").permitAll() // #4
-//                .antMatchers("/rest/*").hasRole("ADMIN") // #6
-                .antMatchers("/test/**").access("hasRole('ROLE_ADMIN')"); // #6
-//                .anyRequest().authenticated() // 7
-//                .and()
-//                .formLogin()
-//                .permitAll()
-//                .and().logout().permitAll().permitAll();
+                .antMatchers("/signup", "/about").permitAll() // #4
+                .antMatchers("/rest/*").hasRole("ADMIN") // #6
+                .antMatchers("/test/**").access("hasRole('ROLE_ADMIN')") // #6
+                .anyRequest().authenticated() // 7
+                .and()
+                .formLogin()
+                .permitAll()
+                .and().logout().permitAll().permitAll();
 
 
 //        http
@@ -73,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                .authorizeRequests()
 //                .anyRequest().permitAll();
 
-        http.addFilterAfter(new AuthenticationFilter(authenticationManager()), BasicAuthenticationFilter.class);
+//        http.addFilter(new AuthenticationFilter(authenticationManager()));
 //        http.addFilterBefore(new AuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
     }
 }
