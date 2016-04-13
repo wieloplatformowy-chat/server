@@ -36,18 +36,16 @@ public class User implements Serializable {
         return name;
     }
 
-    public User setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public User setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
-        return this;
     }
 
     @Override public String toString() {

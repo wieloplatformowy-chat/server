@@ -12,10 +12,6 @@ public class BaseResponse<ERROR extends ResponseError> {
         return new BaseResponse().setSuccess();
     }
 
-    public static BaseResponse error(Errors error) {
-        return error(ResponseError.from(error));
-    }
-
     public static <T extends  ResponseError>BaseResponse<T> error(T error) {
         return new BaseResponse<T>().setError(error);
     }
