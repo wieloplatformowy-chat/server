@@ -12,8 +12,8 @@ import org.springframework.security.authentication.encoding.MessageDigestPasswor
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.FilterChain;
@@ -28,45 +28,35 @@ import java.io.IOException;
 //import org.slf4j.LoggerFactory;
 //import org.slf4j.MDC;
 
-public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class AuthenticationFilter extends GenericFilterBean {
 
-//    private final static Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
+    //    private final static Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
     public static final String TOKEN_SESSION_KEY = "token";
     public static final String USER_SESSION_KEY = "user";
 
     @Autowired
     protected AuthenticationManager authenticationManager;
 
-    public AuthenticationFilter() {
-    }
-
     public AuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
-    @Override
+    //    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = asHttp(request);
         HttpServletResponse httpResponse = asHttp(response);
 
-        Optional<String> username = Optional.fromNullable(httpRequest.getHeader("X-Auth-Username"));
-        Optional<String> password = Optional.fromNullable(httpRequest.getHeader("X-Auth-Password"));
         Optional<String> token = Optional.fromNullable(httpRequest.getHeader("X-Auth-Token"));
+        if (!token.isPresent())
+            token = Optional.fromNullable(httpRequest.getParameter("api_key"));
 
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
 
         try {
-            if (postToAuthenticate(httpRequest, resourcePath)) {
-//                logger.debug("Trying to authenticate user {} by X-Auth-Username method", username);
-                processUsernamePasswordAuthentication(httpResponse, username, password);
-                return;
-            }
-
             if (token.isPresent()) {
 //                logger.debug("Trying to authenticate user by X-Auth-Token method. Token: {}", token);
                 processTokenAuthentication(token);
             }
-
             logger.debug("AuthenticationFilter is passing request down the filter chain");
             addSessionContextToLogging();
             chain.doFilter(request, response);
@@ -77,10 +67,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         } catch (AuthenticationException authenticationException) {
             SecurityContextHolder.clearContext();
             httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, authenticationException.getMessage());
-        } finally {
+        } catch (Exception e) {
+        } finally
+        {
 //            MDC.remove(TOKEN_SESSION_KEY);
 //            MDC.remove(USER_SESSION_KEY);
         }
+
     }
 
     private void addSessionContextToLogging() {

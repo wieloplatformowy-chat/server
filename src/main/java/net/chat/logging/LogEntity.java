@@ -23,6 +23,8 @@ public class LogEntity implements Serializable {
 
     private Long userId;
 
+    private String userIp;
+
     @NotNull
     private LogPriority priority;
 
@@ -60,6 +62,15 @@ public class LogEntity implements Serializable {
         return this;
     }
 
+    public String getUserIp() {
+        return userIp;
+    }
+
+    public LogEntity setUserIp(String userIp) {
+        this.userIp = userIp;
+        return this;
+    }
+
     public String getMessage() {
         return message;
     }
@@ -79,11 +90,12 @@ public class LogEntity implements Serializable {
     }
 
     @Override public String toString() {
-        return "LogEntity{" +
-                "message='" + message + '\'' +
-                ", priority=" + priority +
+        return "Log{" +
+                "data=" + data +
                 ", userId=" + userId +
-                ", data=" + data +
+                ", userIp='" + userIp + '\'' +
+                ", priority=" + priority +
+                ", message='" + message + '\'' +
                 '}';
     }
 }
