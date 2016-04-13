@@ -6,13 +6,14 @@ import net.chat.logging.LogEntity;
 import net.chat.logging.LogService;
 import net.chat.repository.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
+@ResponseBody
 @RequestMapping("/rest/users")
-//@PreAuthorize("hasAuthority('ROLE_DOMAIN_USER')")
 public class UserRestController {
     @Autowired
     private UserDao userDao;

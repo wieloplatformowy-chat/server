@@ -14,7 +14,6 @@
 	<context:component-scan base-package="net.chat.repository"/>
 	<context:component-scan base-package="net.chat.rest"/>
     <context:component-scan base-package="net.chat.config"/>
-    <context:component-scan base-package="net.chat.config.authentication"/>
 
 	<tx:annotation-driven />
 </beans>
