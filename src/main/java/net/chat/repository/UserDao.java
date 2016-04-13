@@ -1,7 +1,6 @@
 package net.chat.repository;
 
 import net.chat.entity.User;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,7 @@ public class UserDao extends BaseDao<User>{
     }
 
     @SuppressWarnings("unchecked")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PostAuthorize("hasRole('ROLE_ADMIN')")
     public List<User> findAll() {
         return getEm().createNamedQuery("User.findAll").getResultList();
     }

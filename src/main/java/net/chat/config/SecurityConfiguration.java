@@ -1,10 +1,12 @@
 package net.chat.config;
 
+import net.chat.config.authentication.AuthenticationFilter;
+import net.chat.config.authentication.UserNamePasswordAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,35 +31,42 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    /**
-     * This section defines the user accounts which can be used for
-     * authentication as well as the roles each user has.
-     */
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(backendAdminUsernamePasswordAuthenticationProvider());
         auth.inMemoryAuthentication()
-                .withUser("greg").password("turnquist").roles("USER").and()
-                .withUser("ollie").password("gierke").roles("USER", "ADMIN");
+                .withUser("t").password("t").roles("USER").and()
+                .withUser("a").password("a").roles("USER", "ADMIN");
     }
 
-    /**
-     * This section defines the security policy for the app.
-     * - BASIC authentication is supported (enough for this REST-based demo)
-     * - /employees is secured using URL security shown below
-     * - CSRF headers are disabled since we are only testing the REST interface,
-     * not a web one.
-     * <p>
-     * NOTE: GET is not shown which defaults to permitted.
-     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .httpBasic().and()
-                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
+
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/employees").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PUT, "/employees/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PATCH, "/employees/**").hasRole("ADMIN").and()
-                .csrf().disable();
+                .antMatchers("/signup","/about").permitAll() // #4
+                .antMatchers("/rest/*").hasRole("ADMIN") // #6
+                .antMatchers("/test/**").access("hasRole('ROLE_ADMIN')") // #6
+                .anyRequest().authenticated() // 7
+                .and()
+                .formLogin()
+                .permitAll()
+                .and().logout().permitAll().permitAll();
+
+
+//        http
+//                .httpBasic().and().csrf().disable()
+//                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
+//                .authorizeRequests()
+//                .anyRequest().permitAll();
+
+        http.addFilter(new AuthenticationFilter(authenticationManager()));
+//        http.addFilterBefore(new AuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public AuthenticationProvider backendAdminUsernamePasswordAuthenticationProvider() {
+        return new UserNamePasswordAuthenticationProvider();
     }
 }
