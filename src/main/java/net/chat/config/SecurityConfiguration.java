@@ -1,9 +1,6 @@
 package net.chat.config;
 
 import net.chat.config.authentication.AuthenticationFilter;
-import net.chat.config.authentication.PasswordAuthenticationProvider;
-import net.chat.config.authentication.TokenAuthenticationProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,11 +20,11 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    @Autowired
-    PasswordAuthenticationProvider passwordAuthenticationProvider;
-
-    @Autowired
-    TokenAuthenticationProvider tokenAuthenticationProvider;
+//    @Autowired
+//    PasswordAuthenticationProvider passwordAuthenticationProvider;
+//
+//    @Autowired
+//    TokenAuthenticationProvider tokenAuthenticationProvider;
 
     @Bean
     @Override
@@ -41,8 +38,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .withUser("t").password("t").roles("USER").and()
                 .withUser("a").password("a").roles("USER", "ADMIN");
 
-        auth.authenticationProvider(passwordAuthenticationProvider);
-        auth.authenticationProvider(tokenAuthenticationProvider);
+//        auth.authenticationProvider(passwordAuthenticationProvider);
+//        auth.authenticationProvider(tokenAuthenticationProvider);
     }
 
     @Override
