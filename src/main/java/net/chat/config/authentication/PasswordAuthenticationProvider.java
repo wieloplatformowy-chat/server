@@ -20,7 +20,7 @@ public class PasswordAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private TokenService tokenService;
 
-//    @Autowired
+    @Autowired
     UserDao userDao;
 
     @Override

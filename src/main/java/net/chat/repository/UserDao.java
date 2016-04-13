@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 //@Transactional
+@Repository
 public class UserDao extends BaseDao<User>{
 
     public User findById(Long id) {
