@@ -1,5 +1,6 @@
 package net.chat.config;
 
+import net.chat.config.authentication.AuthenticationFilter;
 import net.chat.config.authentication.PasswordAuthenticationProvider;
 import net.chat.config.authentication.TokenAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
  * @author Mariusz Gorzycki
@@ -21,10 +23,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-
     @Autowired
     PasswordAuthenticationProvider passwordAuthenticationProvider;
 
@@ -43,8 +41,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .withUser("t").password("t").roles("USER").and()
                 .withUser("a").password("a").roles("USER", "ADMIN");
 
-        auth.authenticationProvider(passwordAuthenticationProvider);
-        auth.authenticationProvider(tokenAuthenticationProvider);
+//        auth.authenticationProvider(passwordAuthenticationProvider);
+//        auth.authenticationProvider(tokenAuthenticationProvider);
     }
 
     @Override
@@ -71,7 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                .authorizeRequests()
 //                .anyRequest().permitAll();
 
-//        http.addFilterAfter(new AuthenticationFilter(authenticationManager()), BasicAuthenticationFilter.class);
+        http.addFilterAfter(new AuthenticationFilter(authenticationManager()), BasicAuthenticationFilter.class);
 //        http.addFilterBefore(new AuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
     }
 }

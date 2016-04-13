@@ -41,7 +41,7 @@ public class AuthenticationFilter extends GenericFilterBean {
         this.authenticationManager = authenticationManager;
     }
 
-    //    @Override
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = asHttp(request);
         HttpServletResponse httpResponse = asHttp(response);
