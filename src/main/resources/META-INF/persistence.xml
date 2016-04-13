@@ -9,10 +9,15 @@
       <!-- The datasource is deployed as WEB-INF/spring-quickstart-ds.xml, you
          can find it in the source at src/main/webapp/WEB-INF/spring-quickstart-ds.xml -->
 
+      <!--openshift H2-->
+       <!--<jta-data-source>java:comp/env/jdbc/ExampleDS</jta-data-source>-->
+
+      <!--openshift mysql-->
+       <!--<jta-data-source>java:comp/env/jdbc/</jta-data-source>-->
+
       <!--local jboss-->
        <!--<jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>-->
 
-      <!--openshift mysql-->
        <jta-data-source>java:jboss/datasources/MySQLDS</jta-data-source>
 
       <properties>

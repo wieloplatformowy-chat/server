@@ -47,7 +47,7 @@ public class UserDaoTest {
         user.setName("Jane Doe");
         user.setPassword("jane.doe@mailinator.com");
 
-        userDao.persist(user);
+        userDao.register(user);
         Long id = user.getId();
         Assert.assertNotNull(id);
 
@@ -64,7 +64,7 @@ public class UserDaoTest {
         user.setName("John Smith");
         user.setPassword("test");
 
-        userDao.persist(user);
+        userDao.register(user);
     }
 
 //    @Test
@@ -72,7 +72,7 @@ public class UserDaoTest {
         User user = new User();
         user.setName("Jane Doe");
         user.setPassword("jane.doe@mailinator.com");
-        userDao.persist(user);
+        userDao.register(user);
 
         List<User> users = userDao.findAll();
         Assert.assertEquals(2, users.size());
