@@ -9,7 +9,12 @@
 
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
-	<context:component-scan base-package="net.chat.*"/>
+	<context:component-scan base-package="net.chat.entity"/>
+	<context:component-scan base-package="net.chat.logging"/>
+	<context:component-scan base-package="net.chat.repository"/>
+	<context:component-scan base-package="net.chat.rest"/>
+    <context:component-scan base-package="net.chat.config"/>
+    <context:component-scan base-package="net.chat.config.authentication"/>
 
 	<tx:annotation-driven />
 </beans>
