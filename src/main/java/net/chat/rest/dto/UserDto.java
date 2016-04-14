@@ -18,4 +18,11 @@ public class UserDto {
                 .setName(name)
                 .setPassword(password);
     }
+
+    @Override public String toString() {
+        return "UserDto{" +
+                "name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

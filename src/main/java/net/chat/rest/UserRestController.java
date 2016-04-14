@@ -54,16 +54,16 @@ public class UserRestController {
     @RequestMapping(path = "/login", method = RequestMethod.POST, produces = "application/json")
     public DataResponse<String> login(@RequestBody UserDto userDto) {
         User user = userDto.toUserWithNullId();
+        logger.debug("login user: "+userDto);
         String token = userService.login(user);
-        logger.debug("logged in");
         return DataResponse.success(token);
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST, produces = "application/json")
     public BaseResponse register(@RequestBody UserDto userDto) {
         User user = userDto.toUserWithNullId();
-        userService.register(user);
         logger.debug("registered user: " + user);
+        userService.register(user);
         return BaseResponse.success();
     }
 
@@ -88,8 +88,9 @@ public class UserRestController {
     }
 
     @ExceptionHandler(Throwable.class)
-    public Throwable handleException(Throwable throwable) throws Throwable {
-        throw throwable;
+    public DataResponse<Throwable> handleException(Throwable throwable) throws Throwable {
+        return DataResponse.error(Errors.UNKNOWN_ERROR, throwable);
+//        throw throwable;
 //        return throwable;
     }
 }

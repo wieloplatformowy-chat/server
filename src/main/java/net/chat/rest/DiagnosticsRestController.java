@@ -63,8 +63,8 @@ public class DiagnosticsRestController {
     }
 
     @ExceptionHandler(Throwable.class)
-    public Throwable handleException(Throwable throwable) throws Throwable {
-        throw throwable;
+    public DataResponse<Throwable> handleException(Throwable throwable) throws Throwable {
+        return DataResponse.error(Errors.UNKNOWN_ERROR, throwable);
 //        return throwable;
     }
 }
