@@ -10,6 +10,7 @@ import java.sql.Timestamp;
  * @since 30.03.2016
  */
 @Entity
+@Table(name = "Logs")
 @NamedQueries({@NamedQuery(name = "LogEntity.findAll", query = "SELECT l FROM LogEntity l")})
 public class LogEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -21,7 +22,7 @@ public class LogEntity implements Serializable {
     @NotNull
     private Timestamp data;
 
-    private Long userId;
+    private String userName = "null";
 
     private String userIp;
 
@@ -29,6 +30,7 @@ public class LogEntity implements Serializable {
     private LogPriority priority;
 
     @NotNull
+    @Column(columnDefinition = "mediumtext")
     private String message;
 
     public static LogEntity withCurrentDate() {
@@ -53,12 +55,12 @@ public class LogEntity implements Serializable {
         return this;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getUserName() {
+        return userName;
     }
 
-    public LogEntity setUserId(Long userId) {
-        this.userId = userId;
+    public LogEntity setUserName(String userName) {
+        this.userName = userName;
         return this;
     }
 
@@ -92,7 +94,7 @@ public class LogEntity implements Serializable {
     @Override public String toString() {
         return "Log{" +
                 "data=" + data +
-                ", userId=" + userId +
+                ", userName=" + userName +
                 ", userIp='" + userIp + '\'' +
                 ", priority=" + priority +
                 ", message='" + message + '\'' +

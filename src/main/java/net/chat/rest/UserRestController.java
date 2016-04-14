@@ -9,6 +9,7 @@ import net.chat.repository.UserDao;
 import net.chat.rest.dto.UserDto;
 import net.chat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -67,30 +68,38 @@ public class UserRestController {
         return BaseResponse.success();
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserService.UserAlreadyExistsException.class)
-    public BaseResponse handleUAEException() throws Throwable {
+    public BaseResponse handleUAEException(Exception e) throws Throwable {
+        logger.error(e.getMessage());
         return BaseResponse.error(Errors.USERNAME_IS_TAKEN);
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(UserService.UserNotExistsException.class)
-    public BaseResponse handleUNEException() throws Throwable {
+    public BaseResponse handleUNEException(Exception e) throws Throwable {
+        logger.error(e.getMessage());
         return BaseResponse.error(Errors.USER_NOT_EXISTS);
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(UserService.NullCredentialsException.class)
-    public BaseResponse handleNCException() throws Throwable {
+    public BaseResponse handleNCException(Exception e) throws Throwable {
+        logger.error(e.getMessage());
         return BaseResponse.error(Errors.CREDENTIALS_NOT_PROVIDED);
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(UserService.InvalidPasswordException.class)
-    public BaseResponse handleIPException() throws Throwable {
+    public BaseResponse handleIPException(Exception e) throws Throwable {
+        logger.error(e.getMessage());
         return BaseResponse.error(Errors.INVALID_PASSWORD);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Throwable.class)
-    public DataResponse<Throwable> handleException(Throwable throwable) throws Throwable {
-        return DataResponse.error(Errors.UNKNOWN_ERROR, throwable);
-//        throw throwable;
-//        return throwable;
+    public DataResponse handleException(Throwable throwable) throws Throwable {
+        logger.error(throwable.getClass().getName()+": "+throwable.getMessage());
+        return DataResponse.error(Errors.UNKNOWN_ERROR, throwable.getMessage());
     }
 }

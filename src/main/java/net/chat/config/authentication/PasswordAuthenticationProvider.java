@@ -32,7 +32,7 @@ public class PasswordAuthenticationProvider implements AuthenticationProvider {
         User foundUser = userDao.findByName(username);
 
         if (!foundUser.getPassword().equals(password))
-            throw new UserService.InvalidPasswordException();
+            throw new UserService.InvalidPasswordException("Password: " + password + " is not valid for user: " + username);
 
         AuthenticationWithToken resultOfAuthentication = new AuthenticationWithToken(username, null, AuthorityUtils.createAuthorityList("USER"));
         String newToken = tokenService.generateNewToken();
@@ -44,7 +44,7 @@ public class PasswordAuthenticationProvider implements AuthenticationProvider {
 
     private void throwIfUserNameNotExists(String username) {
         if (!userDao.isUserNameTaken(username))
-            throw new UserService.UserNotExistsException();
+            throw new UserService.UserNotExistsException("User: " + username + " not exists");
     }
 
     @Override

@@ -41,7 +41,7 @@ public class LogService {
     }
 
     private LogEntity prepareLog(String message){
-        return LogEntity.withCurrentDate().setUserId(findUserId()).setUserIp(findUserIp()).setMessage(message);
+        return LogEntity.withCurrentDate().setUserName(findUserName()).setUserIp(findUserIp()).setMessage(message);
     }
 
     private String findUserIp() {
@@ -61,15 +61,15 @@ public class LogService {
         logDao.persist(logEntity);
     }
 
-    private Long findUserId(){
-        Long userId = null;
+    private String findUserName(){
+        String userName = null;
 
         try {
-            userId = userService.getLoggedUser().getId();
+            userName = userService.getLoggedUser().getName();
         }catch (Exception e){
 
         }
 
-        return userId;
+        return userName;
     }
 }

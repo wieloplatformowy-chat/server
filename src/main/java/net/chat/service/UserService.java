@@ -7,12 +7,10 @@ import net.chat.repository.UserDao;
 import net.chat.rest.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +32,7 @@ public class UserService {
         throwIfCredentialsNotExists(user);
 
         if (checkIfUserWithNameExists(user))
-            throw new UserAlreadyExistsException();
+            throw new UserAlreadyExistsException("User: " + user.getName() + " already exists");
 
         userDao.persist(user);
     }
@@ -46,27 +44,20 @@ public class UserService {
     @Transactional
     public String login(User user) {
         throwIfCredentialsNotExists(user);
-        try {
 
-            Authentication authentication = tryToAuthenticateWithUsernameAndPassword(user.getName(), user.getPassword());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        Authentication authentication = tryToAuthenticateWithUsernameAndPassword(user.getName(), user.getPassword());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            AuthenticationWithToken token = (AuthenticationWithToken) authentication;
+        AuthenticationWithToken token = (AuthenticationWithToken) authentication;
 
-            return token.getToken();
-        }catch (UsernameNotFoundException e){
-            throw new UserNotExistsException();
-        }
-        catch (BadCredentialsException e){
-            throw new InvalidPasswordException();
-        }
+        return token.getToken();
     }
 
-    public User getLoggedUser(){
-        String loggedUser = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public User getLoggedUser() {
+        String loggedUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (!userDao.isUserNameTaken(loggedUser))
-            throw new UserNotExistsException();
+            throw new UserNotExistsException("User: " + loggedUser + " not exists");
 
         return userDao.findByName(loggedUser);
     }
@@ -102,18 +93,30 @@ public class UserService {
 
     private void throwIfCredentialsNotExists(User user) {
         if (user.getName() == null || user.getPassword() == null)
-            throw new NullCredentialsException();
+            throw new NullCredentialsException("Credentials are null");
     }
 
     public static class NullCredentialsException extends NullPointerException {
+        public NullCredentialsException(String s) {
+            super(s);
+        }
     }
 
     public static class UserAlreadyExistsException extends IllegalArgumentException {
+        public UserAlreadyExistsException(String s) {
+            super(s);
+        }
     }
 
     public static class UserNotExistsException extends IllegalArgumentException {
+        public UserNotExistsException(String s) {
+            super(s);
+        }
     }
 
     public static class InvalidPasswordException extends IllegalArgumentException {
+        public InvalidPasswordException(String s) {
+            super(s);
+        }
     }
 }

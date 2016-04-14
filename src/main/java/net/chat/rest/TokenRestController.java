@@ -5,16 +5,14 @@ import net.chat.entity.User;
 import net.chat.logging.LogService;
 import net.chat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/rest/users")
-public class DiagnosticsRestController {
+@RequestMapping("/token")
+public class TokenRestController {
     @Autowired
     private LogService logger;
 
@@ -24,7 +22,7 @@ public class DiagnosticsRestController {
     @Autowired
     TokenService tokenService;
 
-    @RequestMapping(path = "/checktoken", method = RequestMethod.PATCH, produces = "application/json")
+    @RequestMapping(path = "/check", method = RequestMethod.GET, produces = "application/json")
     public DataResponse<String> checkToken(HttpServletRequest httpRequest) {
         String token = httpRequest.getHeader("X-Auth-Token");
         if (token == null)
@@ -38,7 +36,7 @@ public class DiagnosticsRestController {
         return DataResponse.error(Errors.INVALID_TOKEN, "Token invalid: " + token);
     }
 
-    @RequestMapping(path = "/whoami", method = RequestMethod.PATCH, produces = "application/json")
+    @RequestMapping(path = "/whoami", method = RequestMethod.GET, produces = "application/json")
     public DataResponse<User> whoAmI(HttpServletRequest httpRequest) {
         logger.debug("whoami");
 
@@ -47,24 +45,9 @@ public class DiagnosticsRestController {
         return DataResponse.success(loggedUser);
     }
 
-    @ExceptionHandler(UserService.UserAlreadyExistsException.class)
-    public BaseResponse handleUAEException() throws Throwable {
-        return BaseResponse.error(Errors.USERNAME_IS_TAKEN);
-    }
-
-    @ExceptionHandler(UserService.UserNotExistsException.class)
-    public BaseResponse handleUNEException() throws Throwable {
-        return BaseResponse.error(Errors.USER_NOT_EXISTS);
-    }
-
-    @ExceptionHandler(UserService.NullCredentialsException.class)
-    public BaseResponse handleNCException() throws Throwable {
-        return BaseResponse.error(Errors.CREDENTIALS_NOT_PROVIDED);
-    }
-
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Throwable.class)
     public DataResponse<Throwable> handleException(Throwable throwable) throws Throwable {
         return DataResponse.error(Errors.UNKNOWN_ERROR, throwable);
-//        return throwable;
     }
 }
