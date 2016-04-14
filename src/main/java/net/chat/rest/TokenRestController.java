@@ -33,7 +33,7 @@ public class TokenRestController {
         if (tokenService.contains(token))
             return DataResponse.success("Token valid: " + token);
 
-        return DataResponse.error(Errors.INVALID_TOKEN, "Token invalid: " + token);
+        throw new InvalidTokenException("Token invalid: " + token);
     }
 
     @RequestMapping(path = "/whoami", method = RequestMethod.GET, produces = "application/json")
@@ -45,9 +45,30 @@ public class TokenRestController {
         return DataResponse.success(loggedUser);
     }
 
+    public static class InvalidTokenException extends IllegalArgumentException{
+        public InvalidTokenException(String s) {
+            super(s);
+        }
+    };
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(UserService.UserNotExistsException.class)
+    public DataResponse handleUNEException(Exception e) throws Throwable {
+        logger.error("Invalid token or null");
+        return DataResponse.error(Errors.INVALID_TOKEN, "Invalid token or null");
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(InvalidTokenException.class)
+    public DataResponse handleITException(Exception e) throws Throwable {
+        logger.error(e.getMessage());
+        return DataResponse.error(Errors.INVALID_TOKEN, e.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Throwable.class)
-    public DataResponse<Throwable> handleException(Throwable throwable) throws Throwable {
-        return DataResponse.error(Errors.UNKNOWN_ERROR, throwable);
+    public DataResponse handleException(Throwable throwable) throws Throwable {
+        logger.error(throwable.getClass().getName()+": "+throwable.getMessage());
+        return DataResponse.error(Errors.UNKNOWN_ERROR, throwable.getMessage());
     }
 }

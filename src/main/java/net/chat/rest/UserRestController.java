@@ -16,7 +16,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/users")
+@RequestMapping("/user")
 public class UserRestController {
     @Autowired
     private UserDao userDao;
