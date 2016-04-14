@@ -48,7 +48,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
@@ -56,20 +55,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/static/*", "/resources/*").permitAll() // #4
 //                .antMatchers("/rest/*").hasRole("ADMIN") // #6
                 .antMatchers("/test/**").access("hasRole('ROLE_ADMIN')") // #6
-                .anyRequest().authenticated() // 7
                 .and()
                 .formLogin()
                 .permitAll()
                 .and().logout().permitAll();
 
-
-//        http
-//                .httpBasic().and().csrf().disable()
-//                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
-//                .authorizeRequests()
-//                .anyRequest().permitAll();
-
         http.addFilterAfter(new AuthenticationFilter(authenticationManager()), BasicAuthenticationFilter.class);
-//        http.addFilterBefore(new AuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
     }
 }
