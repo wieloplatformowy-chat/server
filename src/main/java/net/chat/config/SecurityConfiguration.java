@@ -51,7 +51,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/signup","/about", "/swagger-ui.html", "/index", "/", "/v2/api-docs").permitAll() // #4
+                .antMatchers("/signup", "/about", "/swagger-ui.html", "/index", "/", "/v2/api-docs").permitAll() // #4
                 .antMatchers("/static/*", "/resources/*").permitAll() // #4
 //                .antMatchers("/rest/*").hasRole("ADMIN") // #6
                 .antMatchers("/test/**").access("hasRole('ROLE_ADMIN')") // #6

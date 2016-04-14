@@ -1,17 +1,15 @@
 package net.chat.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-//@Table(uniqueConstraints = @UniqueConstraint(columnNames = "name"))
-//@NamedQueries({@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
-//        @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name")})
-public class LoginToken implements Serializable {
+@Table(name = "Users", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+@NamedQueries({@NamedQuery(name = "User.findAll", query = "SELECT u FROM UserEntity u"),
+        @NamedQuery(name = "User.findByName", query = "SELECT u FROM UserEntity u WHERE u.name = :name")})
+public class UserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -38,7 +36,7 @@ public class LoginToken implements Serializable {
         return name;
     }
 
-    public LoginToken setName(String name) {
+    public UserEntity setName(String name) {
         this.name = name;
         return this;
     }
@@ -47,13 +45,13 @@ public class LoginToken implements Serializable {
         return password;
     }
 
-    public LoginToken setPassword(String password) {
+    public UserEntity setPassword(String password) {
         this.password = password;
         return this;
     }
 
     @Override public String toString() {
-        return "User{" +
+        return "UserEntity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +

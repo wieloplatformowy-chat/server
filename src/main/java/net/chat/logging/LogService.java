@@ -20,27 +20,27 @@ public class LogService {
     @Autowired
     UserService userService;
 
-    public void debug(String message){
+    public void debug(String message) {
         LogEntity log = prepareLog(message).setPriority(LogPriority.DEBUG);
         dispatchLog(log);
     }
 
-    public void info(String message){
+    public void info(String message) {
         LogEntity log = prepareLog(message).setPriority(LogPriority.INFO);
         dispatchLog(log);
     }
 
-    public void warn(String message){
+    public void warn(String message) {
         LogEntity log = prepareLog(message).setPriority(LogPriority.WARN);
         dispatchLog(log);
     }
 
-    public void error(String message){
+    public void error(String message) {
         LogEntity log = prepareLog(message).setPriority(LogPriority.ERROR);
         dispatchLog(log);
     }
 
-    private LogEntity prepareLog(String message){
+    private LogEntity prepareLog(String message) {
         return LogEntity.withCurrentDate().setUserName(findUserName()).setUserIp(findUserIp()).setMessage(message);
     }
 
@@ -48,25 +48,25 @@ public class LogService {
         String remoteAddress = null;
 
         try {
-             remoteAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
-        }catch (Exception e){
+            remoteAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
+        } catch (Exception e) {
 
         }
 
         return remoteAddress;
     }
 
-    private void dispatchLog(LogEntity logEntity){
+    private void dispatchLog(LogEntity logEntity) {
         System.out.println(logEntity);
         logDao.persist(logEntity);
     }
 
-    private String findUserName(){
+    private String findUserName() {
         String userName = null;
 
         try {
             userName = userService.getLoggedUser().getName();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 

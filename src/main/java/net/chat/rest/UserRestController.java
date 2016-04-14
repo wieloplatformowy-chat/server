@@ -1,7 +1,7 @@
 package net.chat.rest;
 
 import net.chat.config.authentication.TokenService;
-import net.chat.entity.User;
+import net.chat.entity.UserEntity;
 import net.chat.logging.LogDao;
 import net.chat.logging.LogEntity;
 import net.chat.logging.LogService;
@@ -35,7 +35,7 @@ public class UserRestController {
 
     @ApiIgnore
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public DataResponse<List<User>> listAllMembers() {
+    public DataResponse<List<UserEntity>> listAllMembers() {
         return DataResponse.success(userDao.findAll());
     }
 
@@ -47,22 +47,22 @@ public class UserRestController {
 
     @ApiIgnore
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
-    public User findMemberById(@PathVariable("id") Long id) {
+    public UserEntity findMemberById(@PathVariable("id") Long id) {
         logger.debug("find member: " + id);
         return userDao.findById(id);
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST, produces = "application/json")
     public DataResponse<String> login(@RequestBody UserDto userDto) {
-        User user = userDto.toUserWithNullId();
-        logger.debug("login user: "+userDto);
+        UserEntity user = userDto.toUserWithNullId();
+        logger.debug("login user: " + userDto);
         String token = userService.login(user);
         return DataResponse.success(token);
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST, produces = "application/json")
     public BaseResponse register(@RequestBody UserDto userDto) {
-        User user = userDto.toUserWithNullId();
+        UserEntity user = userDto.toUserWithNullId();
         logger.debug("registered user: " + user);
         userService.register(user);
         return BaseResponse.success();
@@ -99,7 +99,7 @@ public class UserRestController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Throwable.class)
     public DataResponse handleException(Throwable throwable) throws Throwable {
-        logger.error(throwable.getClass().getName()+": "+throwable.getMessage());
+        logger.error(throwable.getClass().getName() + ": " + throwable.getMessage());
         return DataResponse.error(Errors.UNKNOWN_ERROR, throwable.getMessage());
     }
 }

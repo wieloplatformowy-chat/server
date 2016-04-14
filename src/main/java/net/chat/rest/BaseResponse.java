@@ -16,7 +16,7 @@ public class BaseResponse<ERROR extends ResponseError> {
         return error(ResponseError.from(error));
     }
 
-    public static <T extends  ResponseError>BaseResponse<T> error(T error) {
+    public static <T extends ResponseError> BaseResponse<T> error(T error) {
         return new BaseResponse<T>().setError(error);
     }
 

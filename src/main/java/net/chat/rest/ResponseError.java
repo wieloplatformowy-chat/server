@@ -15,7 +15,7 @@ public class ResponseError {
         this.message = message;
     }
 
-    public static ResponseError from(Errors error){
+    public static ResponseError from(Errors error) {
         return new ResponseError(error.getId(), error.name(), error.getMessage());
     }
 

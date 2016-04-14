@@ -1,7 +1,7 @@
 package net.chat.rest;
 
 import net.chat.config.authentication.TokenService;
-import net.chat.entity.User;
+import net.chat.entity.UserEntity;
 import net.chat.logging.LogService;
 import net.chat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,19 +37,21 @@ public class TokenRestController {
     }
 
     @RequestMapping(path = "/whoami", method = RequestMethod.GET, produces = "application/json")
-    public DataResponse<User> whoAmI(HttpServletRequest httpRequest) {
+    public DataResponse<UserEntity> whoAmI(HttpServletRequest httpRequest) {
         logger.debug("whoami");
 
-        User loggedUser = userService.getLoggedUser();
+        UserEntity loggedUser = userService.getLoggedUser();
 
         return DataResponse.success(loggedUser);
     }
 
-    public static class InvalidTokenException extends IllegalArgumentException{
+    public static class InvalidTokenException extends IllegalArgumentException {
         public InvalidTokenException(String s) {
             super(s);
         }
-    };
+    }
+
+    ;
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(UserService.UserNotExistsException.class)
@@ -68,7 +70,7 @@ public class TokenRestController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Throwable.class)
     public DataResponse handleException(Throwable throwable) throws Throwable {
-        logger.error(throwable.getClass().getName()+": "+throwable.getMessage());
+        logger.error(throwable.getClass().getName() + ": " + throwable.getMessage());
         return DataResponse.error(Errors.UNKNOWN_ERROR, throwable.getMessage());
     }
 }

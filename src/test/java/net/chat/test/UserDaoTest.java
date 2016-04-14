@@ -1,6 +1,6 @@
 package net.chat.test;
 
-import net.chat.entity.User;
+import net.chat.entity.UserEntity;
 import net.chat.repository.UserDao;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class UserDaoTest {
 
     @Test
     public void testFindById() {
-        User user = userDao.findById(0l);
+        UserEntity user = userDao.findById(0l);
 
         Assert.assertEquals("John Smith", user.getName());
         Assert.assertEquals("john.smith@mailinator.com", user.getPassword());
@@ -35,15 +35,15 @@ public class UserDaoTest {
 
     @Test
     public void testFindByName() {
-        User user = userDao.findByName("John Smith");
+        UserEntity user = userDao.findByName("John Smith");
 
         Assert.assertEquals("John Smith", user.getName());
         Assert.assertEquals("john.smith@mailinator.com", user.getPassword());
     }
 
-//    @Test
+    //    @Test
     public void testRegister() {
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setName("Jane Doe");
         user.setPassword("jane.doe@mailinator.com");
 
@@ -52,7 +52,7 @@ public class UserDaoTest {
         Assert.assertNotNull(id);
 
         Assert.assertEquals(2, userDao.findAll().size());
-        User newUser = userDao.findById(id);
+        UserEntity newUser = userDao.findById(id);
 
         Assert.assertEquals("Jane Doe", newUser.getName());
         Assert.assertEquals("jane.doe@mailinator.com", newUser.getPassword());
@@ -60,23 +60,23 @@ public class UserDaoTest {
 
     @Test(expected = PersistenceException.class)
     public void testRegisterConstraintNameViolation() {
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setName("John Smith");
         user.setPassword("test");
 
         userDao.persist(user);
     }
 
-//    @Test
+    //    @Test
     public void testFindAll() {
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setName("Jane Doe");
         user.setPassword("jane.doe@mailinator.com");
         userDao.persist(user);
 
-        List<User> users = userDao.findAll();
+        List<UserEntity> users = userDao.findAll();
         Assert.assertEquals(2, users.size());
-        User newUser = users.get(1);
+        UserEntity newUser = users.get(1);
 
         Assert.assertEquals("Jane Doe", newUser.getName());
         Assert.assertEquals("jane.doe@mailinator.com", newUser.getPassword());

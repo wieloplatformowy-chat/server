@@ -1,6 +1,6 @@
 package net.chat.repository;
 
-import net.chat.entity.User;
+import net.chat.entity.UserEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,14 +8,14 @@ import java.util.List;
 
 @Transactional
 @Repository
-public class UserDao extends BaseDao<User>{
+public class UserDao extends BaseDao<UserEntity> {
 
-    public User findById(Long id) {
-        return getEm().find(User.class, id);
+    public UserEntity findById(Long id) {
+        return getEm().find(UserEntity.class, id);
     }
 
-    public User findByName(String name) {
-        return (User) getEm().createNamedQuery("User.findByName").setParameter("name", name).getSingleResult();
+    public UserEntity findByName(String name) {
+        return (UserEntity) getEm().createNamedQuery("User.findByName").setParameter("name", name).getSingleResult();
     }
 
     public boolean isUserNameTaken(String name) {
@@ -23,7 +23,7 @@ public class UserDao extends BaseDao<User>{
     }
 
     @SuppressWarnings("unchecked")
-    public List<User> findAll() {
+    public List<UserEntity> findAll() {
         return getEm().createNamedQuery("User.findAll").getResultList();
     }
 }

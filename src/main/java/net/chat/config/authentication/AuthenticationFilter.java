@@ -68,8 +68,7 @@ public class AuthenticationFilter extends GenericFilterBean {
             SecurityContextHolder.clearContext();
             httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, authenticationException.getMessage());
         } catch (Exception e) {
-        } finally
-        {
+        } finally {
 //            MDC.remove(TOKEN_SESSION_KEY);
 //            MDC.remove(USER_SESSION_KEY);
         }
@@ -131,9 +130,9 @@ public class AuthenticationFilter extends GenericFilterBean {
     private Authentication tryToAuthenticate(Authentication requestAuthentication) {
         Authentication responseAuthentication = authenticationManager.authenticate(requestAuthentication);
         if (responseAuthentication == null || !responseAuthentication.isAuthenticated()) {
-            throw new InternalAuthenticationServiceException("Unable to authenticate Domain User for provided credentials");
+            throw new InternalAuthenticationServiceException("Unable to authenticate Domain UserEntity for provided credentials");
         }
-        logger.debug("User successfully authenticated");
+        logger.debug("UserEntity successfully authenticated");
         return responseAuthentication;
     }
 }

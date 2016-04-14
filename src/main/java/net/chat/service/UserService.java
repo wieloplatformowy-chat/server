@@ -2,7 +2,7 @@ package net.chat.service;
 
 import com.google.common.base.Optional;
 import net.chat.config.authentication.AuthenticationWithToken;
-import net.chat.entity.User;
+import net.chat.entity.UserEntity;
 import net.chat.repository.UserDao;
 import net.chat.rest.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +28,11 @@ public class UserService {
     protected AuthenticationManager authenticationManager;
 
     @Transactional
-    public void register(User user) {
+    public void register(UserEntity user) {
         throwIfCredentialsNotExists(user);
 
         if (checkIfUserWithNameExists(user))
-            throw new UserAlreadyExistsException("User: " + user.getName() + " already exists");
+            throw new UserAlreadyExistsException("UserEntity: " + user.getName() + " already exists");
 
         userDao.persist(user);
     }
@@ -42,7 +42,7 @@ public class UserService {
     }
 
     @Transactional
-    public String login(User user) {
+    public String login(UserEntity user) {
         throwIfCredentialsNotExists(user);
 
         Authentication authentication = tryToAuthenticateWithUsernameAndPassword(user.getName(), user.getPassword());
@@ -53,11 +53,11 @@ public class UserService {
         return token.getToken();
     }
 
-    public User getLoggedUser() {
+    public UserEntity getLoggedUser() {
         String loggedUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (!userDao.isUserNameTaken(loggedUser))
-            throw new UserNotExistsException("User: " + loggedUser + " not exists");
+            throw new UserNotExistsException("UserEntity: " + loggedUser + " not exists");
 
         return userDao.findByName(loggedUser);
     }
@@ -81,17 +81,17 @@ public class UserService {
 
         Authentication responseAuthentication = authenticationManager.authenticate(requestAuthentication);
         if (responseAuthentication == null || !responseAuthentication.isAuthenticated()) {
-            throw new InternalAuthenticationServiceException("Unable to authenticate Domain User for provided credentials");
+            throw new InternalAuthenticationServiceException("Unable to authenticate Domain UserEntity for provided credentials");
         }
-//        logger.debug("User successfully authenticated");
+//        logger.debug("UserEntity successfully authenticated");
         return responseAuthentication;
     }
 
-    private boolean checkIfUserWithNameExists(User user) {
+    private boolean checkIfUserWithNameExists(UserEntity user) {
         return userDao.isUserNameTaken(user.getName());
     }
 
-    private void throwIfCredentialsNotExists(User user) {
+    private void throwIfCredentialsNotExists(UserEntity user) {
         if (user.getName() == null || user.getPassword() == null)
             throw new NullCredentialsException("Credentials are null");
     }

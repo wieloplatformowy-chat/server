@@ -1,7 +1,7 @@
 package net.chat.rest.dto;
 
 import io.swagger.annotations.ApiParam;
-import net.chat.entity.User;
+import net.chat.entity.UserEntity;
 
 /**
  * @author Mariusz Gorzycki
@@ -13,8 +13,8 @@ public class UserDto {
     @ApiParam(required = true)
     public String password;
 
-    public User toUserWithNullId(){
-        return new User()
+    public UserEntity toUserWithNullId() {
+        return new UserEntity()
                 .setName(name)
                 .setPassword(password);
     }
