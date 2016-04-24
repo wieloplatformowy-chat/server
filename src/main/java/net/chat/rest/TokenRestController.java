@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/token")
 public class TokenRestController {
@@ -45,13 +46,17 @@ public class TokenRestController {
         return DataResponse.success(loggedUser);
     }
 
+    @RequestMapping(path = "/version", method = RequestMethod.PATCH, produces = "application/json")
+    public String version() {
+        logger.debug("version");
+        return "1 - cross origin added";
+    }
+
     public static class InvalidTokenException extends IllegalArgumentException {
         public InvalidTokenException(String s) {
             super(s);
         }
     }
-
-    ;
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(UserService.UserNotExistsException.class)

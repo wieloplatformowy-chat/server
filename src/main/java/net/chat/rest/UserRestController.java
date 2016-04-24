@@ -15,6 +15,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserRestController {
@@ -67,7 +68,6 @@ public class UserRestController {
         userService.register(user);
         return BaseResponse.success();
     }
-
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserService.UserAlreadyExistsException.class)
