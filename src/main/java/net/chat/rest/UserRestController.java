@@ -75,21 +75,21 @@ public class UserRestController {
         return BaseResponse.error(Errors.USERNAME_IS_TAKEN);
     }
 
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserService.UserNotExistsException.class)
     public BaseResponse handleUNEException(Exception e) throws Throwable {
         logger.error(e.getMessage());
         return BaseResponse.error(Errors.USER_NOT_EXISTS);
     }
 
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserService.NullCredentialsException.class)
     public BaseResponse handleNCException(Exception e) throws Throwable {
         logger.error(e.getMessage());
         return BaseResponse.error(Errors.CREDENTIALS_NOT_PROVIDED);
     }
 
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserService.InvalidPasswordException.class)
     public BaseResponse handleIPException(Exception e) throws Throwable {
         logger.error(e.getMessage());
