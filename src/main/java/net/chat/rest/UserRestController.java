@@ -68,6 +68,7 @@ public class UserRestController {
         return BaseResponse.success();
     }
 
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserService.UserAlreadyExistsException.class)
     public BaseResponse handleUAEException(Exception e) throws Throwable {
