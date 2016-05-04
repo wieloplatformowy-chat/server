@@ -11,7 +11,7 @@
 		   http://www.springframework.org/schema/jee 
 		   http://www.springframework.org/schema/jee/spring-jee.xsd">
 
-    <!-- JDNI name for EntityManagerFactory is defined in src/main/resources/META-INF/persistence.xml -->
+    <!-- JDNI username for EntityManagerFactory is defined in src/main/resources/META-INF/persistence.xml -->
     <jee:jndi-lookup jndi-name="java:jboss/spring-quickstart/persistence" id="entityManagerFactory"
                      expected-type="javax.persistence.EntityManagerFactory"/>
 

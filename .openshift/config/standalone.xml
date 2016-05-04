@@ -99,7 +99,7 @@
                     <driver>mysql</driver>
                     <security>
                       <user-name>${env.OPENSHIFT_MYSQL_DB_USERNAME}</user-name>
-                      <password>${env.OPENSHIFT_MYSQL_DB_PASSWORD}</password>
+                        <password>${env.OPENSHIFT_MYSQL_DB_PASSWORD}</password>
                     </security>
                     <validation>
                         <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
@@ -116,7 +116,7 @@
                     <driver>postgresql</driver>
                     <security>
                       <user-name>${env.OPENSHIFT_POSTGRESQL_DB_USERNAME}</user-name>
-                      <password>${env.OPENSHIFT_POSTGRESQL_DB_PASSWORD}</password>
+                        <password>${env.OPENSHIFT_POSTGRESQL_DB_PASSWORD}</password>
                     </security>
                     <validation>
                         <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
@@ -265,7 +265,7 @@
         <subsystem xmlns="urn:jboss:domain:jdr:1.0"/>
         <subsystem xmlns="urn:jboss:domain:jgroups:1.0" default-stack="tcp">
             <stack name="tcp">
-                <transport type="TCP" socket-binding="jgroups-tcp"> 
+                <transport type="TCP" socket-binding="jgroups-tcp">
                 	<property name="external_addr">${env.OPENSHIFT_GEAR_DNS}</property>
                     <property name="external_port">${env.OPENSHIFT_JBOSSAS_CLUSTER_PROXY_PORT}</property>
                     <property name="bind_port">${env.OPENSHIFT_JBOSSAS_CLUSTER_PORT}</property>
@@ -293,7 +293,7 @@
                 <protocol type="pbcast.GMS"/>
                 <protocol type="UFC"/>
                 <protocol type="MFC"/>
-                <protocol type="FRAG2"/>  
+                <protocol type="FRAG2"/>
                 <!--protocol type="pbcast.STATE_TRANSFER"/>
                 <protocol type="pbcast.FLUSH"/-->
             </stack>
@@ -319,7 +319,7 @@
                 <security-enabled>false</security-enabled>
                 <journal-file-size>102400</journal-file-size>
                 <journal-min-files>2</journal-min-files>
-                
+
                 <thread-pool-max-size>${messaging.thread.pool.max.size}</thread-pool-max-size>
  	            <scheduled-thread-pool-max-size>${messaging.scheduled.thread.pool.max.size}</scheduled-thread-pool-max-size>
 

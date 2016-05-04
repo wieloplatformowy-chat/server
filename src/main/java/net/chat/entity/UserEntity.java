@@ -8,7 +8,9 @@ import java.io.Serializable;
 @Entity
 @Table(name = "Users", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 @NamedQueries({@NamedQuery(name = "User.findAll", query = "SELECT u FROM UserEntity u"),
-        @NamedQuery(name = "User.findByName", query = "SELECT u FROM UserEntity u WHERE u.name = :name")})
+        @NamedQuery(name = "User.findByName", query = "SELECT u FROM UserEntity u WHERE u.name = :name"),
+        @NamedQuery(name = "User.findByNameLike", query = "SELECT u FROM UserEntity u WHERE lower(u.name) like lower(:name)"),
+        @NamedQuery(name = "User.findByEmailLike", query = "SELECT u FROM UserEntity u WHERE lower(u.email) like lower(:email)")})
 public class UserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -19,6 +21,10 @@ public class UserEntity implements Serializable {
     @NotNull
     @Size(min = 1, max = 25)
     private String name;
+
+    @NotNull
+    @Size(min = 1, max = 25)
+    private String email;
 
     @NotNull
     @Size(min = 1, max = 25)
@@ -50,10 +56,21 @@ public class UserEntity implements Serializable {
         return this;
     }
 
-    @Override public String toString() {
+    public String getEmail() {
+        return email;
+    }
+
+    public UserEntity setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    @Override
+    public String toString() {
         return "UserEntity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }

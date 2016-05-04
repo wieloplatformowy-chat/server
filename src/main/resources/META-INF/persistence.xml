@@ -4,8 +4,8 @@
         http://java.sun.com/xml/ns/persistence
         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
     <persistence-unit name="primary">
-        <!-- If you are running in a production environment, add a managed
-           data source, this example data source is just for development and testing! -->
+        <!-- If you are running in a production environment, addFriend a managed
+           token source, this example token source is just for development and testing! -->
         <!-- The datasource is deployed as WEB-INF/spring-quickstart-ds.xml, you
            can find it in the source at src/main/webapp/WEB-INF/spring-quickstart-ds.xml -->
 

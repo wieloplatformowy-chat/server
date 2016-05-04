@@ -1,8 +1,9 @@
 package net.chat.config.authentication;
 
 import net.chat.entity.UserEntity;
+import net.chat.exception.InvalidPasswordException;
+import net.chat.exception.UserNotExistsException;
 import net.chat.repository.UserDao;
-import net.chat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,7 +33,7 @@ public class PasswordAuthenticationProvider implements AuthenticationProvider {
         UserEntity foundUser = userDao.findByName(username);
 
         if (!foundUser.getPassword().equals(password))
-            throw new UserService.InvalidPasswordException("Password: " + password + " is not valid for user: " + username);
+            throw new InvalidPasswordException("Password: " + password + " is not valid for user: " + username);
 
         AuthenticationWithToken resultOfAuthentication = new AuthenticationWithToken(username, null, AuthorityUtils.createAuthorityList("USER"));
         String newToken = tokenService.generateNewToken();
@@ -44,7 +45,7 @@ public class PasswordAuthenticationProvider implements AuthenticationProvider {
 
     private void throwIfUserNameNotExists(String username) {
         if (!userDao.isUserNameTaken(username))
-            throw new UserService.UserNotExistsException("UserEntity: " + username + " not exists");
+            throw new UserNotExistsException("UserEntity: " + username + " not exists");
     }
 
     @Override

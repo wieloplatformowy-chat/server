@@ -48,7 +48,7 @@ public class LogService {
         String remoteAddress = null;
 
         try {
-            remoteAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr();
+            remoteAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getLocalName();
         } catch (Exception e) {
 
         }

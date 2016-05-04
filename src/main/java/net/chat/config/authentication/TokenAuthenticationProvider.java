@@ -1,9 +1,9 @@
 package net.chat.config.authentication;
 
 import com.google.common.base.Optional;
+import net.chat.exception.InvalidTokenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
@@ -24,7 +24,7 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
         String token = ((Optional<String>) authentication.getPrincipal()).orNull();
 
         if (!tokenService.contains(token)) {
-            throw new BadCredentialsException("Invalid token or token expired");
+            throw new InvalidTokenException("Invalid token or token expired");
         }
 
         return tokenService.retrieve(token);

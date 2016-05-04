@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -38,6 +39,16 @@ public class TokenService {
 
     public boolean contains(String token) {
         return restApiAuthTokenCache.get(token) != null;
+    }
+
+    public boolean remove(Authentication authentication) {
+        Map<Object, Element> all = restApiAuthTokenCache.<Object, Element>getAll(restApiAuthTokenCache.getKeys());
+        for (Map.Entry<Object, Element> entry : all.entrySet()) {
+            if (entry.getValue().getObjectValue() == authentication)
+                return restApiAuthTokenCache.remove(entry.getKey());
+        }
+
+        return false;
     }
 
     public Authentication retrieve(String token) {

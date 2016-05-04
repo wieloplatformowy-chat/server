@@ -341,6 +341,11 @@
             <artifactId>ehcache</artifactId>
             <version>2.10.0</version>
         </dependency>
+		<dependency>
+			<groupId>org.easytesting</groupId>
+			<artifactId>fest-assert</artifactId>
+			<version>1.4</version>
+		</dependency>
     </dependencies>
 
 	<build>
