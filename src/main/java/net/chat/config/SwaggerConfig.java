@@ -36,6 +36,7 @@ public class SwaggerConfig {
                 .description("Api documentation")
                 .version("0.2.1 - Friends")
                 .contact("projektchat22@gmail.com")
+                .license("Copyright © 2016")
                 .build();
     }
 }
