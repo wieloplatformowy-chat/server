@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author Mariusz Gorzycki
  * @since 30.03.2016
@@ -16,6 +18,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class LogService {
     @Autowired
     LogDao logDao;
+
+    @Autowired(required = true)
+    private HttpServletRequest request;
 
     @Autowired
     UserService userService;
@@ -49,6 +54,9 @@ public class LogService {
 
         try {
             remoteAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getLocalName() + " : ";
+            remoteAddress = request.getRemoteAddr() + " :R: ";
+            remoteAddress = request.getLocalAddr() + " :L: ";
+            remoteAddress = request.getRemoteHost() + " :H: ";
             remoteAddress += ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteUser() + " : ";
             remoteAddress += ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getContextPath() + " : ";
             remoteAddress += ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteHost() + " : ";
