@@ -19,7 +19,7 @@ public class ResponseError {
     }
 
     public static ResponseError from(Errors error) {
-        return new ResponseError(error.getId(), error.name(), error.getMessage());
+        return new ResponseError(error.getId(), error.name(), "*DEBUG ONLY* " + error.getMessage());
     }
 
     public int getId() {

@@ -11,7 +11,8 @@ import java.util.Objects;
 @Table(name = "Friends", uniqueConstraints = @UniqueConstraint(columnNames = {"user", "friend"}))
 @NamedQueries({@NamedQuery(name = "Friend.findAll", query = "SELECT f FROM FriendEntity f"),
         @NamedQuery(name = "Friend.isFriend", query = "SELECT f FROM FriendEntity f WHERE f.user = :user and f.friend = :friend"),
-        @NamedQuery(name = "Friend.findFriends", query = "SELECT u FROM FriendEntity f, UserEntity u WHERE f.user = :user and f.friend = u")})
+        @NamedQuery(name = "Friend.findFriends", query = "SELECT u FROM FriendEntity f, UserEntity u WHERE f.user = :user and f.friend = u"),
+        @NamedQuery(name = "Friend.delete", query = "DELETE FROM FriendEntity f WHERE f.user = :user and f.friend = :friend")})
 public class FriendEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

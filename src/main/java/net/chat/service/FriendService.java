@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import net.chat.entity.UserEntity;
 import net.chat.exception.AlreadyAFriendException;
+import net.chat.exception.NotAFriendException;
 import net.chat.exception.NullCredentialsException;
 import net.chat.repository.FriendDao;
 import net.chat.rest.dto.UserWithoutPasswordDto;
@@ -38,8 +39,6 @@ public class FriendService {
 
     @Transactional
     public void addFriend(Long friendId) {
-        throwIfCredentialsNotExists(friendId);
-
         UserEntity loggedUser = userService.getLoggedUser();
         UserEntity friend = userService.findById(friendId);
 
@@ -47,6 +46,17 @@ public class FriendService {
             throw new AlreadyAFriendException("User with id: " + friendId + " has been added as friend before.");
 
         friendDao.addFriend(loggedUser, friend);
+    }
+
+    @Transactional
+    public void deleteFriend(Long friendId) {
+        UserEntity loggedUser = userService.getLoggedUser();
+        UserEntity friend = userService.findById(friendId);
+
+        if (!isFriend(loggedUser, friend))
+            throw new NotAFriendException("User with id: " + friendId + " is not your friend.");
+
+        friendDao.deleteFriend(loggedUser, friend);
     }
 
     public List<UserWithoutPasswordDto> myFriends() {

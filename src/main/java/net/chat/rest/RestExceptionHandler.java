@@ -63,6 +63,13 @@ public class RestExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NotAFriendException.class)
+    public ResponseError handleNAFException(NotAFriendException e) throws Throwable {
+        logger.error(e.getMessage());
+        return ResponseError.from(Errors.NOT_A_FRIEND);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseError handleJSONException(HttpMessageNotReadableException e) throws Throwable {
         logger.error(e.getMessage());

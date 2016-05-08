@@ -69,16 +69,22 @@ public abstract class BaseRestControllerTest {
         assertThat(response.getId()).isEqualTo(Errors.INVALID_JSON.getId());
     }
 
+    protected void testNullCredentials(MockHttpServletRequestBuilder request) throws Exception {
+        testNullCredentials(request, null, null);
+    }
+
     protected void testNullCredentials(MockHttpServletRequestBuilder request, Object content) throws Exception {
         testNullCredentials(request, content, null);
     }
 
     protected void testNullCredentials(MockHttpServletRequestBuilder request, Object content, String token) throws Exception {
         //when
+        if (content != null)
+            request.content(toJson(content)).contentType(MediaType.APPLICATION_JSON);
         if (token != null)
             request.header(AUTH_TOKEN_HEADER, token);
 
-        ResultActions result = mock.perform(request.content(toJson(content)).contentType(MediaType.APPLICATION_JSON));
+        ResultActions result = mock.perform(request);
         ResponseError response = responseFromJson(result, ResponseError.class);
 
         //then

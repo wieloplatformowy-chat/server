@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import net.chat.config.authentication.TokenService;
 import net.chat.entity.UserEntity;
 import net.chat.repository.FriendDao;
-import net.chat.rest.dto.IdDto;
 import net.chat.rest.dto.UserWithoutPasswordDto;
 import net.chat.rest.message.Errors;
 import net.chat.rest.message.ResponseError;
@@ -13,7 +12,6 @@ import net.chat.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
@@ -25,8 +23,7 @@ import java.util.List;
 
 import static net.chat.rest.dto.UserWithoutPasswordDto.fromEntity;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -64,13 +61,8 @@ public class FriendRestControllerTest extends BaseRestControllerTest {
     }
 
     @Test
-    public void addFriendNullCredentials() throws Exception {
-        testNullCredentials(post("/friends/add"), new IdDto().setId(null));
-    }
-
-    @Test
     public void addFriendInvalidAndNoAuthHeader() throws Exception {
-        testInvalidAndNullToken(post("/friends/add"), new IdDto().setId(1L));
+        testInvalidAndNullToken(post("/friends/add/1"));
     }
 
     @Test
@@ -79,10 +71,10 @@ public class FriendRestControllerTest extends BaseRestControllerTest {
         UserEntity logged = registerUser(USERNAME, EMAIL, PASSWORD);
         String token = userService.login(logged);
         UserEntity user = registerUser(FRIEND_NAME, EMAIL, PASSWORD);
-        IdDto idDto = new IdDto().setId(user.getId());
+        Long id = user.getId();
 
         //when
-        ResultActions result = mock.perform(post("/friends/add").content(toJson(idDto)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
+        ResultActions result = mock.perform(post("/friends/add/" + id).header(AUTH_TOKEN_HEADER, token));
 
         //then
         result.andExpect(status().isOk());
@@ -95,16 +87,32 @@ public class FriendRestControllerTest extends BaseRestControllerTest {
         UserEntity logged = registerUser(USERNAME, EMAIL, PASSWORD);
         String token = userService.login(logged);
         UserEntity user = registerUser(FRIEND_NAME, EMAIL, PASSWORD);
-        IdDto idDto = new IdDto().setId(user.getId());
+        friendDao.addFriend(logged, user);
+        Long id = user.getId();
 
         //when
-        mock.perform(post("/friends/add").content(toJson(idDto)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
-        ResultActions result = mock.perform(post("/friends/add").content(toJson(idDto)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
+        ResultActions result = mock.perform(post("/friends/add/" + id).header(AUTH_TOKEN_HEADER, token));
         ResponseError response = responseFromJson(result, ResponseError.class);
 
         //then
         result.andExpect(status().isBadRequest());
         assertThat(response.getId()).isEqualTo(Errors.ALREADY_A_FRIEND.getId());
+    }
+
+    @Test
+    public void addFriendUserNotExists() throws Exception {
+        //given
+        UserEntity logged = registerUser(USERNAME, EMAIL, PASSWORD);
+        String token = userService.login(logged);
+        Long notExistingId = 123L;
+
+        //when
+        ResultActions result = mock.perform(post("/friends/add/" + notExistingId).header(AUTH_TOKEN_HEADER, token));
+        ResponseError response = responseFromJson(result, ResponseError.class);
+
+        //then
+        result.andExpect(status().isBadRequest());
+        assertThat(response.getId()).isEqualTo(Errors.USER_NOT_EXISTS.getId());
     }
 
     @Test()
@@ -161,5 +169,60 @@ public class FriendRestControllerTest extends BaseRestControllerTest {
         //then
         result.andExpect(status().isOk());
         assertThat(list.isEmpty()).isTrue();
+    }
+
+    @Test
+    public void deleteFriendInvalidAndNoAuthHeader() throws Exception {
+        testInvalidAndNullToken(delete("/friends/delete/1"));
+    }
+
+    @Test
+    public void deleteFriendSuccess() throws Exception {
+        //given
+        UserEntity logged = registerUser(USERNAME, EMAIL, PASSWORD);
+        String token = userService.login(logged);
+        UserEntity friend = registerUser(FRIEND_NAME, EMAIL, PASSWORD);
+        friendDao.addFriend(logged, friend);
+        Long id = friend.getId();
+
+        //when
+        ResultActions result = mock.perform(delete("/friends/delete/" + id).header(AUTH_TOKEN_HEADER, token));
+
+        //then
+        result.andExpect(status().isOk());
+        assertThat(friendService.isMyFriend(friend)).isFalse();
+    }
+
+    @Test
+    public void deleteFriendNotAFriend() throws Exception {
+        //given
+        UserEntity logged = registerUser(USERNAME, EMAIL, PASSWORD);
+        String token = userService.login(logged);
+        UserEntity friend = registerUser(FRIEND_NAME, EMAIL, PASSWORD);
+        Long id = friend.getId();
+
+        //when
+        ResultActions result = mock.perform(delete("/friends/delete/" + id).header(AUTH_TOKEN_HEADER, token));
+        ResponseError response = responseFromJson(result, ResponseError.class);
+
+        //then
+        result.andExpect(status().isBadRequest());
+        assertThat(response.getId()).isEqualTo(Errors.NOT_A_FRIEND.getId());
+    }
+
+    @Test
+    public void deleteFriendUserNotExists() throws Exception {
+        //given
+        UserEntity logged = registerUser(USERNAME, EMAIL, PASSWORD);
+        String token = userService.login(logged);
+        Long notExistingId = 123L;
+
+        //when
+        ResultActions result = mock.perform(delete("/friends/delete/" + notExistingId).header(AUTH_TOKEN_HEADER, token));
+        ResponseError response = responseFromJson(result, ResponseError.class);
+
+        //then
+        result.andExpect(status().isBadRequest());
+        assertThat(response.getId()).isEqualTo(Errors.USER_NOT_EXISTS.getId());
     }
 }

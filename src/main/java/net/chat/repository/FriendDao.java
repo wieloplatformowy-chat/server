@@ -29,6 +29,10 @@ public class FriendDao extends BaseDao<FriendEntity> {
         getEm().persist(friendEntity);
     }
 
+    public void deleteFriend(UserEntity user, UserEntity friend) {
+        getEm().createNamedQuery("Friend.delete").setParameter("user", user).setParameter("friend", friend).executeUpdate();
+    }
+
     @SuppressWarnings("unchecked")
     public List<UserEntity> findFriends(UserEntity user) {
         return getEm().createNamedQuery("Friend.findFriends").setParameter("user", user).getResultList();
