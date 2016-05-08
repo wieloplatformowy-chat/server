@@ -19,9 +19,6 @@ public class LogService {
     @Autowired
     LogDao logDao;
 
-    @Autowired(required = true)
-    private HttpServletRequest request;
-
     @Autowired
     UserService userService;
 
@@ -50,30 +47,10 @@ public class LogService {
     }
 
     private String findUserIp() {
-        String remoteAddress = null;
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
-        try {
-            remoteAddress = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getLocalName() + " : ";
-            remoteAddress = request.getRemoteAddr() + " :R: ";
-            remoteAddress = request.getLocalAddr() + " :L: ";
-            remoteAddress = request.getRemoteHost() + " :H: ";
-            remoteAddress += ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteUser() + " : ";
-            remoteAddress += ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getContextPath() + " : ";
-            remoteAddress += ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteHost() + " : ";
-            remoteAddress += ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemoteAddr() + " : ";
-            remoteAddress += ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRemotePort();
-            remoteAddress = getClientIpAddr(request);
-            HttpServletRequest request2 = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-            request2.toString();
-        } catch (Exception e) {
-
-        }
-
-        return remoteAddress;
-    }
-
-    public static String getClientIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
+
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
@@ -103,9 +80,7 @@ public class LogService {
         try {
             userName = userService.getLoggedUser().getName();
         } catch (Exception e) {
-
         }
-
         return userName;
     }
 }
