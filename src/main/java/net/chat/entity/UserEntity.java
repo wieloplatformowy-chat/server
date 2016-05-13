@@ -1,9 +1,13 @@
 package net.chat.entity;
 
+import org.fest.util.Collections;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Table(name = "Users", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
@@ -29,6 +33,12 @@ public class UserEntity implements Serializable {
     @NotNull
     @Size(min = 1, max = 25)
     private String password;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "UserGroups",
+            joinColumns = @JoinColumn(name = "user"),
+            inverseJoinColumns = @JoinColumn(name = "group"))
+    private List<GroupEntity> groups;
 
     public Long getId() {
         return id;
@@ -62,6 +72,17 @@ public class UserEntity implements Serializable {
 
     public UserEntity setEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public List<GroupEntity> getGroups() {
+        if (groups == null)
+            groups = new LinkedList<>();
+        return groups;
+    }
+
+    public UserEntity setGroups(GroupEntity... groups) {
+        this.groups = Collections.list(groups);
         return this;
     }
 
