@@ -7,18 +7,18 @@ import net.chat.entity.UserEntity;
  * @author Mariusz Gorzycki
  * @since 03.04.2016
  */
-public class LoginDto {
+public class LoginParams {
     @ApiModelProperty(required = true, position = 0)
     public String name;
     @ApiModelProperty(required = true, position = 1)
     public String password;
 
-    public static LoginDto fromEntity(UserEntity user) {
-        return new LoginDto().setName(user.getName()).setPassword(user.getPassword());
+    public static LoginParams fromEntity(UserEntity user) {
+        return new LoginParams().setName(user.getName()).setPassword(user.getPassword());
     }
 
-    public static LoginDto fromUserDto(UserDto user) {
-        return new LoginDto().setName(user.name).setPassword(user.password);
+    public static LoginParams fromUserDto(RegisterParams user) {
+        return new LoginParams().setName(user.name).setPassword(user.password);
     }
 
     public UserEntity toUserWithNullId() {
@@ -29,18 +29,18 @@ public class LoginDto {
 
     @Override
     public String toString() {
-        return "UserDto{" +
+        return "RegisterParams{" +
                 "name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
 
-    public LoginDto setPassword(String password) {
+    public LoginParams setPassword(String password) {
         this.password = password;
         return this;
     }
 
-    public LoginDto setName(String name) {
+    public LoginParams setName(String name) {
         this.name = name;
         return this;
     }

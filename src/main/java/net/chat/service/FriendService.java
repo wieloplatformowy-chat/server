@@ -7,7 +7,7 @@ import net.chat.exception.AlreadyAFriendException;
 import net.chat.exception.NotAFriendException;
 import net.chat.exception.NullCredentialsException;
 import net.chat.repository.FriendDao;
-import net.chat.rest.dto.UserWithoutPasswordDto;
+import net.chat.rest.dto.UserWithoutPasswordResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,19 +59,19 @@ public class FriendService {
         friendDao.deleteFriend(loggedUser, friend);
     }
 
-    public List<UserWithoutPasswordDto> myFriends() {
+    public List<UserWithoutPasswordResponse> myFriends() {
         UserEntity loggedUser = userService.getLoggedUser();
 
         List<UserEntity> friends = friendDao.findFriends(loggedUser);
 
-        return FluentIterable.from(friends).transform(new Function<UserEntity, UserWithoutPasswordDto>() {
+        return FluentIterable.from(friends).transform(new Function<UserEntity, UserWithoutPasswordResponse>() {
             @Override
-            public UserWithoutPasswordDto apply(UserEntity input) {
-                return UserWithoutPasswordDto.fromEntity(input);
+            public UserWithoutPasswordResponse apply(UserEntity input) {
+                return UserWithoutPasswordResponse.fromEntity(input);
             }
-        }).toSortedList(new Comparator<UserWithoutPasswordDto>() {
+        }).toSortedList(new Comparator<UserWithoutPasswordResponse>() {
             @Override
-            public int compare(UserWithoutPasswordDto o1, UserWithoutPasswordDto o2) {
+            public int compare(UserWithoutPasswordResponse o1, UserWithoutPasswordResponse o2) {
                 return o1.name.compareTo(o2.name);
             }
         });

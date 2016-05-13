@@ -6,8 +6,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import net.chat.config.authentication.TokenService;
 import net.chat.logging.LogService;
-import net.chat.rest.dto.OnlineDto;
-import net.chat.rest.dto.UserWithoutPasswordDto;
+import net.chat.rest.dto.OnlineResponse;
+import net.chat.rest.dto.UserWithoutPasswordResponse;
 import net.chat.rest.message.ResponseError;
 import net.chat.rest.message.RestResponse;
 import net.chat.service.FriendService;
@@ -68,9 +68,9 @@ public class FriendRestController extends RestExceptionHandler {
     @ApiResponses({
             @ApiResponse(code = 400, message = "Failure", response = ResponseError.class),
             @ApiResponse(code = 401, message = "Unauthorized")})
-    public List<UserWithoutPasswordDto> my() {
+    public List<UserWithoutPasswordResponse> my() {
         logger.debug("my friends");
-        List<UserWithoutPasswordDto> result = friendService.myFriends();
+        List<UserWithoutPasswordResponse> result = friendService.myFriends();
         return result;
     }
 
@@ -80,11 +80,11 @@ public class FriendRestController extends RestExceptionHandler {
     @ApiResponses({
             @ApiResponse(code = 400, message = "Failure", response = ResponseError.class),
             @ApiResponse(code = 401, message = "Unauthorized")})
-    public OnlineDto online(@PathVariable Long id) {
+    public OnlineResponse online(@PathVariable Long id) {
         logger.debug("check online: : " + id);
 
         userService.throwIfNotLoggedIn();
 
-        return new OnlineDto().setOnline(new Random().nextBoolean());
+        return new OnlineResponse().setOnline(new Random().nextBoolean());
     }
 }

@@ -63,19 +63,19 @@ public class UserRestController extends RestExceptionHandler {
     @ApiOperation(value = "Login user")
     @ApiResponses({
             @ApiResponse(code = 400, message = "Failure", response = ResponseError.class)})
-    public TokenDto login(@RequestBody LoginDto userDto) {
+    public TokenResponse login(@RequestBody LoginParams userDto) {
         UserEntity user = userDto.toUserWithNullId();
         logger.debug("logging user: " + userDto);
         String token = userService.login(user);
-        return TokenDto.with(token);
+        return TokenResponse.with(token);
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST, produces = "application/json")
     @ApiOperation(value = "Register user")
     @ApiResponses({
             @ApiResponse(code = 400, message = "Failure", response = ResponseError.class)})
-    public RestResponse register(@RequestBody UserDto userDto) {
-        UserEntity user = userDto.toUserWithNullId();
+    public RestResponse register(@RequestBody RegisterParams registerParams) {
+        UserEntity user = registerParams.toUserWithNullId();
         logger.debug("registering user: " + user);
         userService.register(user);
         return RestResponse.with("User registered succesfully.");
@@ -87,7 +87,7 @@ public class UserRestController extends RestExceptionHandler {
     @ApiResponses({
             @ApiResponse(code = 400, message = "Failure", response = ResponseError.class),
             @ApiResponse(code = 401, message = "Unauthorized")})
-    public RestResponse delete(@RequestBody PasswordDto restData) {
+    public RestResponse delete(@RequestBody PasswordParam restData) {
         logger.debug("deleting user");
         userService.delete(restData.getPassword());
         return RestResponse.with("User deleted succesfully.");
@@ -99,12 +99,12 @@ public class UserRestController extends RestExceptionHandler {
     @ApiResponses({
             @ApiResponse(code = 400, message = "Failure", response = ResponseError.class),
             @ApiResponse(code = 401, message = "Unauthorized")})
-    public UserWithoutPasswordDto whoAmI() {
+    public UserWithoutPasswordResponse whoAmI() {
         logger.debug("whoami");
 
         UserEntity loggedUser = userService.getLoggedUser();
 
-        return UserWithoutPasswordDto.fromEntity(loggedUser);
+        return UserWithoutPasswordResponse.fromEntity(loggedUser);
     }
 
     @RequestMapping(path = "/logout", method = RequestMethod.GET, produces = "application/json")
@@ -127,10 +127,10 @@ public class UserRestController extends RestExceptionHandler {
     @ApiResponses({
             @ApiResponse(code = 400, message = "Failure", response = ResponseError.class),
             @ApiResponse(code = 401, message = "Unauthorized")})
-    public List<UserWithoutPasswordDto> search(@RequestBody SearchUserDto search) {
+    public List<UserWithoutPasswordResponse> search(@RequestBody SearchUserParams search) {
         logger.debug("search for: " + search);
 
-        List<UserWithoutPasswordDto> result = userService.search(search.name, search.email);
+        List<UserWithoutPasswordResponse> result = userService.search(search.name, search.email);
 
         return result;
     }

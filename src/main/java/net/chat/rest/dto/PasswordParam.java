@@ -6,12 +6,12 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Mariusz Gorzycki
  * @since 03.05.2016
  */
-public class PasswordDto {
+public class PasswordParam {
     @ApiModelProperty(required = true)
     private String password;
 
-    public static PasswordDto with(String data) {
-        return new PasswordDto().setPassword(data);
+    public static PasswordParam with(String data) {
+        return new PasswordParam().setPassword(data);
     }
 
     public String getPassword() {
@@ -20,12 +20,12 @@ public class PasswordDto {
 
     @Override
     public String toString() {
-        return "PasswordDto{" +
+        return "PasswordParam{" +
                 "password='" + password + '\'' +
                 '}';
     }
 
-    public PasswordDto setPassword(String password) {
+    public PasswordParam setPassword(String password) {
         this.password = password;
         return this;
     }

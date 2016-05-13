@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import net.chat.config.authentication.TokenService;
 import net.chat.entity.UserEntity;
 import net.chat.repository.FriendDao;
-import net.chat.rest.dto.UserWithoutPasswordDto;
+import net.chat.rest.dto.UserWithoutPasswordResponse;
 import net.chat.rest.message.Errors;
 import net.chat.rest.message.ResponseError;
 import net.chat.service.FriendService;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static net.chat.rest.dto.UserWithoutPasswordDto.fromEntity;
+import static net.chat.rest.dto.UserWithoutPasswordResponse.fromEntity;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -138,7 +138,7 @@ public class FriendRestControllerTest extends BaseRestControllerTest {
 
         //when
         ResultActions result = mock.perform(get("/friends/my").header(AUTH_TOKEN_HEADER, token));
-        List<UserWithoutPasswordDto> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordDto>>() {
+        List<UserWithoutPasswordResponse> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordResponse>>() {
         });
 
         //then
@@ -163,7 +163,7 @@ public class FriendRestControllerTest extends BaseRestControllerTest {
 
         //when
         ResultActions result = mock.perform(get("/friends/my").header(AUTH_TOKEN_HEADER, token));
-        List<UserWithoutPasswordDto> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordDto>>() {
+        List<UserWithoutPasswordResponse> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordResponse>>() {
         });
 
         //then

@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-import static net.chat.rest.dto.UserWithoutPasswordDto.fromEntity;
+import static net.chat.rest.dto.UserWithoutPasswordResponse.fromEntity;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,10 +54,10 @@ public class UserRestControllerTest extends BaseRestControllerTest {
     @Test
     public void registerSuccess() throws Exception {
         //given
-        UserDto userDto = new UserDto().setName(USERNAME).setEmail(EMAIL).setPassword(PASSWORD);
+        RegisterParams registerParams = new RegisterParams().setName(USERNAME).setEmail(EMAIL).setPassword(PASSWORD);
 
         //when
-        ResultActions result = mock.perform(post("/user/register").content(toJson(userDto)).contentType(MediaType.APPLICATION_JSON));
+        ResultActions result = mock.perform(post("/user/register").content(toJson(registerParams)).contentType(MediaType.APPLICATION_JSON));
 
         //then
         result.andExpect(status().isOk());
@@ -66,11 +66,11 @@ public class UserRestControllerTest extends BaseRestControllerTest {
     @Test
     public void registerUserAlreadyExists() throws Exception {
         //given
-        UserDto userDto = new UserDto().setName(USERNAME).setEmail(EMAIL).setPassword(PASSWORD);
+        RegisterParams registerParams = new RegisterParams().setName(USERNAME).setEmail(EMAIL).setPassword(PASSWORD);
 
         //when
-        mock.perform(post("/user/register").content(toJson(userDto)).contentType(MediaType.APPLICATION_JSON));
-        ResultActions result = mock.perform(post("/user/register").content(toJson(userDto)).contentType(MediaType.APPLICATION_JSON));
+        mock.perform(post("/user/register").content(toJson(registerParams)).contentType(MediaType.APPLICATION_JSON));
+        ResultActions result = mock.perform(post("/user/register").content(toJson(registerParams)).contentType(MediaType.APPLICATION_JSON));
         ResponseError response = responseFromJson(result, ResponseError.class);
 
         //then
@@ -80,33 +80,33 @@ public class UserRestControllerTest extends BaseRestControllerTest {
 
     @Test
     public void registerNullCredentials() throws Exception {
-        testNullCredentials(post("/user/register"), new UserDto().setName(null).setEmail(EMAIL).setPassword(PASSWORD));
+        testNullCredentials(post("/user/register"), new RegisterParams().setName(null).setEmail(EMAIL).setPassword(PASSWORD));
     }
 
     @Test
     public void loginSuccess() throws Exception {
         //given
-        UserDto userDto = new UserDto().setName(USERNAME).setEmail(EMAIL).setPassword(PASSWORD);
-        userService.register(userDto.toUserWithNullId());
-        LoginDto loginDto = LoginDto.fromUserDto(userDto);
+        RegisterParams registerParams = new RegisterParams().setName(USERNAME).setEmail(EMAIL).setPassword(PASSWORD);
+        userService.register(registerParams.toUserWithNullId());
+        LoginParams loginParams = LoginParams.fromUserDto(registerParams);
 
         //when
-        ResultActions result = mock.perform(post("/user/login").content(toJson(loginDto)).contentType(MediaType.APPLICATION_JSON));
-        TokenDto tokenDto = responseFromJson(result, TokenDto.class);
+        ResultActions result = mock.perform(post("/user/login").content(toJson(loginParams)).contentType(MediaType.APPLICATION_JSON));
+        TokenResponse tokenResponse = responseFromJson(result, TokenResponse.class);
 
         //then
         result.andExpect(status().isOk());
-        assertThat(UUID.fromString(tokenDto.getToken())).isNotNull();
+        assertThat(UUID.fromString(tokenResponse.getToken())).isNotNull();
     }
 
     @Test
     public void loginUserNotExists() throws Exception {
         //given
-        UserDto userDto = new UserDto().setName(USERNAME).setEmail(EMAIL).setPassword(PASSWORD);
-        LoginDto loginDto = LoginDto.fromUserDto(userDto);
+        RegisterParams registerParams = new RegisterParams().setName(USERNAME).setEmail(EMAIL).setPassword(PASSWORD);
+        LoginParams loginParams = LoginParams.fromUserDto(registerParams);
 
         //when
-        ResultActions result = mock.perform(post("/user/login").content(toJson(loginDto)).contentType(MediaType.APPLICATION_JSON));
+        ResultActions result = mock.perform(post("/user/login").content(toJson(loginParams)).contentType(MediaType.APPLICATION_JSON));
         ResponseError response = responseFromJson(result, ResponseError.class);
 
         //then
@@ -118,10 +118,10 @@ public class UserRestControllerTest extends BaseRestControllerTest {
     public void loginInvalidPassword() throws Exception {
         //given
         registerUser(USERNAME, EMAIL, PASSWORD);
-        LoginDto loginDtoInvalidPassword = new LoginDto().setName(USERNAME).setPassword("invalidPassword");
+        LoginParams loginParamsInvalidPassword = new LoginParams().setName(USERNAME).setPassword("invalidPassword");
 
         //when
-        ResultActions result = mock.perform(post("/user/login").content(toJson(loginDtoInvalidPassword)).contentType(MediaType.APPLICATION_JSON));
+        ResultActions result = mock.perform(post("/user/login").content(toJson(loginParamsInvalidPassword)).contentType(MediaType.APPLICATION_JSON));
         ResponseError response = responseFromJson(result, ResponseError.class);
 
         //then
@@ -131,7 +131,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
 
     @Test
     public void loginNullCredentials() throws Exception {
-        testNullCredentials(post("/user/login"), new LoginDto().setName(null).setPassword(PASSWORD));
+        testNullCredentials(post("/user/login"), new LoginParams().setName(null).setPassword(PASSWORD));
     }
 
     @Test
@@ -139,7 +139,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
         //given
         UserEntity userEntity = registerUser(USERNAME, EMAIL, PASSWORD);
         String token = userService.login(userEntity);
-        PasswordDto password = PasswordDto.with(PASSWORD);
+        PasswordParam password = PasswordParam.with(PASSWORD);
 
         //when
         ResultActions result = mock.perform(delete("/user/delete").content(toJson(password)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
@@ -154,7 +154,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
         //given
         UserEntity userEntity = registerUser(USERNAME, EMAIL, PASSWORD);
         userService.login(userEntity);
-        PasswordDto password = PasswordDto.with(PASSWORD);
+        PasswordParam password = PasswordParam.with(PASSWORD);
 
         //when
         testInvalidAndNullToken(delete("/user/delete"), password);
@@ -165,7 +165,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
 
     @Test
     public void logoutInvalidAndNoAuthHeader() throws Exception {
-        testInvalidAndNullToken(get("/user/logout"), new SearchUserDto().setName("name").setEmail("required@test.com"));
+        testInvalidAndNullToken(get("/user/logout"), new SearchUserParams().setName("name").setEmail("required@test.com"));
     }
 
     @Test
@@ -173,7 +173,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
         //given
         UserEntity userEntity = registerUser(USERNAME, EMAIL, PASSWORD);
         String token = userService.login(userEntity);
-        PasswordDto password = PasswordDto.with("invalidPassword");
+        PasswordParam password = PasswordParam.with("invalidPassword");
 
         //when
         ResultActions result = mock.perform(delete("/user/delete").content(toJson(password)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
@@ -190,7 +190,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
         //given
         UserEntity userEntity = registerUser(USERNAME, EMAIL, PASSWORD);
         String token = userService.login(userEntity);
-        PasswordDto password = PasswordDto.with(null);
+        PasswordParam password = PasswordParam.with(null);
         //when then
         testNullCredentials(delete("/user/delete"), password, token);
         assertThat(userService.isUserNameTaken(USERNAME)).isTrue();
@@ -210,7 +210,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
 
         //when
         ResultActions result = mock.perform(get("/user/whoami").header(AUTH_TOKEN_HEADER, token));
-        UserWithoutPasswordDto user = responseFromJson(result, UserWithoutPasswordDto.class);
+        UserWithoutPasswordResponse user = responseFromJson(result, UserWithoutPasswordResponse.class);
 
         //then
         result.andExpect(status().isOk());
@@ -236,7 +236,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
 
     @Test()
     public void searchInvalidAndNoAuthHeader() throws Exception {
-        testInvalidAndNullToken(post("/user/search"), new SearchUserDto().setName("name").setEmail("required@test.com"));
+        testInvalidAndNullToken(post("/user/search"), new SearchUserParams().setName("name").setEmail("required@test.com"));
     }
 
     @Test()
@@ -250,11 +250,11 @@ public class UserRestControllerTest extends BaseRestControllerTest {
         UserEntity logged = registerUser("MeName", "required@test.com", PASSWORD);
         String token = userService.login(logged);
 
-        SearchUserDto search = new SearchUserDto().setName("name").setEmail("required@test.com");
+        SearchUserParams search = new SearchUserParams().setName("name").setEmail("required@test.com");
 
         //when
         ResultActions result = mock.perform(post("/user/search").content(toJson(search)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
-        List<UserWithoutPasswordDto> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordDto>>() {
+        List<UserWithoutPasswordResponse> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordResponse>>() {
         });
 
         //then
@@ -275,11 +275,11 @@ public class UserRestControllerTest extends BaseRestControllerTest {
         UserEntity logged = registerUser("MeName", "required@test.com", PASSWORD);
         String token = userService.login(logged);
 
-        SearchUserDto search = new SearchUserDto().setName(null).setEmail("test.com");
+        SearchUserParams search = new SearchUserParams().setName(null).setEmail("test.com");
 
         //when
         ResultActions result = mock.perform(post("/user/search").content(toJson(search)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
-        List<UserWithoutPasswordDto> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordDto>>() {
+        List<UserWithoutPasswordResponse> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordResponse>>() {
         });
 
         //then
@@ -297,11 +297,11 @@ public class UserRestControllerTest extends BaseRestControllerTest {
         UserEntity logged = registerUser("MeName", "required@test.com", PASSWORD);
         String token = userService.login(logged);
 
-        SearchUserDto search = new SearchUserDto().setName("firST").setEmail(null);
+        SearchUserParams search = new SearchUserParams().setName("firST").setEmail(null);
 
         //when
         ResultActions result = mock.perform(post("/user/search").content(toJson(search)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
-        List<UserWithoutPasswordDto> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordDto>>() {
+        List<UserWithoutPasswordResponse> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordResponse>>() {
         });
 
         //then
@@ -318,11 +318,11 @@ public class UserRestControllerTest extends BaseRestControllerTest {
         UserEntity logged = registerUser("MeName", "required@test.com", PASSWORD);
         String token = userService.login(logged);
 
-        SearchUserDto search = new SearchUserDto().setName(null).setEmail(null);
+        SearchUserParams search = new SearchUserParams().setName(null).setEmail(null);
 
         //when
         ResultActions result = mock.perform(post("/user/search").content(toJson(search)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
-        List<UserWithoutPasswordDto> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordDto>>() {
+        List<UserWithoutPasswordResponse> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordResponse>>() {
         });
 
         //then

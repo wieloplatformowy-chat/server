@@ -8,7 +8,7 @@ import net.chat.config.authentication.TokenService;
 import net.chat.entity.UserEntity;
 import net.chat.exception.*;
 import net.chat.repository.UserDao;
-import net.chat.rest.dto.UserWithoutPasswordDto;
+import net.chat.rest.dto.UserWithoutPasswordResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -65,7 +65,7 @@ public class UserService {
         SecurityContextHolder.clearContext();
     }
 
-    public List<UserWithoutPasswordDto> search(String nameFragment, String emailFragment) {
+    public List<UserWithoutPasswordResponse> search(String nameFragment, String emailFragment) {
         final UserEntity loggedUser = getLoggedUser();
 
         List<UserEntity> byNameLike = Collections.emptyList();
@@ -81,14 +81,14 @@ public class UserService {
             public boolean apply(UserEntity input) {
                 return !input.getName().equals(loggedUser.getName());
             }
-        }).transform(new Function<UserEntity, UserWithoutPasswordDto>() {
+        }).transform(new Function<UserEntity, UserWithoutPasswordResponse>() {
             @Override
-            public UserWithoutPasswordDto apply(UserEntity input) {
-                return UserWithoutPasswordDto.fromEntity(input);
+            public UserWithoutPasswordResponse apply(UserEntity input) {
+                return UserWithoutPasswordResponse.fromEntity(input);
             }
-        }).toSortedList(new Comparator<UserWithoutPasswordDto>() {
+        }).toSortedList(new Comparator<UserWithoutPasswordResponse>() {
             @Override
-            public int compare(UserWithoutPasswordDto o1, UserWithoutPasswordDto o2) {
+            public int compare(UserWithoutPasswordResponse o1, UserWithoutPasswordResponse o2) {
                 return o1.name.compareTo(o2.name);
             }
         });

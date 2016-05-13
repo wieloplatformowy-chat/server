@@ -6,12 +6,12 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Mariusz Gorzycki
  * @since 08.05.2016
  */
-public class OnlineDto {
+public class OnlineResponse {
     @ApiModelProperty(required = true)
     private boolean online;
 
-    public static OnlineDto with(boolean data) {
-        return new OnlineDto().setOnline(data);
+    public static OnlineResponse with(boolean data) {
+        return new OnlineResponse().setOnline(data);
     }
 
     public boolean isOnline() {
@@ -20,12 +20,12 @@ public class OnlineDto {
 
     @Override
     public String toString() {
-        return "PasswordDto{" +
+        return "PasswordParam{" +
                 "online='" + online + '\'' +
                 '}';
     }
 
-    public OnlineDto setOnline(boolean online) {
+    public OnlineResponse setOnline(boolean online) {
         this.online = online;
         return this;
     }
