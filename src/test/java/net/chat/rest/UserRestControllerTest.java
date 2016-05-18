@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-import static net.chat.rest.dto.UserWithoutPasswordResponse.fromEntity;
+import static net.chat.rest.dto.UserResponse.fromEntity;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -210,7 +210,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
 
         //when
         ResultActions result = mock.perform(get("/user/whoami").header(AUTH_TOKEN_HEADER, token));
-        UserWithoutPasswordResponse user = responseFromJson(result, UserWithoutPasswordResponse.class);
+        UserResponse user = responseFromJson(result, UserResponse.class);
 
         //then
         result.andExpect(status().isOk());
@@ -254,7 +254,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
 
         //when
         ResultActions result = mock.perform(post("/user/search").content(toJson(search)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
-        List<UserWithoutPasswordResponse> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordResponse>>() {
+        List<UserResponse> list = responseFromJson(result, new TypeReference<List<UserResponse>>() {
         });
 
         //then
@@ -279,7 +279,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
 
         //when
         ResultActions result = mock.perform(post("/user/search").content(toJson(search)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
-        List<UserWithoutPasswordResponse> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordResponse>>() {
+        List<UserResponse> list = responseFromJson(result, new TypeReference<List<UserResponse>>() {
         });
 
         //then
@@ -301,7 +301,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
 
         //when
         ResultActions result = mock.perform(post("/user/search").content(toJson(search)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
-        List<UserWithoutPasswordResponse> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordResponse>>() {
+        List<UserResponse> list = responseFromJson(result, new TypeReference<List<UserResponse>>() {
         });
 
         //then
@@ -322,7 +322,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
 
         //when
         ResultActions result = mock.perform(post("/user/search").content(toJson(search)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
-        List<UserWithoutPasswordResponse> list = responseFromJson(result, new TypeReference<List<UserWithoutPasswordResponse>>() {
+        List<UserResponse> list = responseFromJson(result, new TypeReference<List<UserResponse>>() {
         });
 
         //then

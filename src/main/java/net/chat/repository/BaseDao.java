@@ -12,18 +12,30 @@ public class BaseDao<T> {
     @Autowired
     private EntityManager em;
 
+    /**
+     * {@link EntityManager#find}
+     */
     public void find(Class entityClass, Object primaryKey) {
         em.find(entityClass, primaryKey);
     }
 
+    /**
+     * {@link EntityManager#persist}
+     */
     public void persist(T entity) {
         em.persist(entity);
     }
 
+    /**
+     * {@link EntityManager#remove}
+     */
     public void remove(T entity) {
         em.remove(entity);
     }
 
+    /**
+     * {@link EntityManager#merge}
+     */
     public void merge(T entity) {
         em.merge(entity);
     }

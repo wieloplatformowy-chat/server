@@ -1,6 +1,6 @@
 package net.chat.repository;
 
-import net.chat.entity.UserGroupEntity;
+import net.chat.entity.UserConversationEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,14 +12,14 @@ import java.util.List;
  */
 @Transactional
 @Repository
-public class UserGroupDao extends BaseDao<UserGroupEntity> {
+public class UserConversationDao extends BaseDao<UserConversationEntity> {
 
-    public UserGroupEntity findById(Long id) {
-        return getEm().find(UserGroupEntity.class, id);
+    public UserConversationEntity findById(Long id) {
+        return getEm().find(UserConversationEntity.class, id);
     }
 
     @SuppressWarnings("unchecked")
-    public List<UserGroupEntity> findAll() {
+    public List<UserConversationEntity> findAll() {
         return getEm().createNamedQuery("UserConversations.findAll").getResultList();
     }
 }

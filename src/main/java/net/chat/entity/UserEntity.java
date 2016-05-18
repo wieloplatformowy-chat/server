@@ -35,10 +35,10 @@ public class UserEntity implements Serializable {
     private String password;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "UserGroups",
+    @JoinTable(name = "UserConversations",
             joinColumns = @JoinColumn(name = "user"),
-            inverseJoinColumns = @JoinColumn(name = "group"))
-    private List<GroupEntity> groups;
+            inverseJoinColumns = @JoinColumn(name = "conversation"))
+    private List<ConversationEntity> conversations;
 
     public Long getId() {
         return id;
@@ -75,14 +75,14 @@ public class UserEntity implements Serializable {
         return this;
     }
 
-    public List<GroupEntity> getGroups() {
-        if (groups == null)
-            groups = new LinkedList<>();
-        return groups;
+    public List<ConversationEntity> getConversations() {
+        if (conversations == null)
+            conversations = new LinkedList<>();
+        return conversations;
     }
 
-    public UserEntity setGroups(GroupEntity... groups) {
-        this.groups = Collections.list(groups);
+    public UserEntity setConversations(ConversationEntity... conversations) {
+        this.conversations = Collections.list(conversations);
         return this;
     }
 

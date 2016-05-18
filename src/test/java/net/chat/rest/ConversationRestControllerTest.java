@@ -1,14 +1,18 @@
 package net.chat.rest;
 
 import net.chat.config.authentication.TokenService;
+import net.chat.entity.ConversationEntity;
 import net.chat.entity.UserEntity;
+import net.chat.repository.ConversationDao;
 import net.chat.repository.FriendDao;
-import net.chat.repository.GroupDao;
+import net.chat.repository.UserConversationDao;
 import net.chat.repository.UserDao;
+import net.chat.rest.dto.ConversationResponse;
 import net.chat.rest.message.Errors;
 import net.chat.rest.message.ResponseError;
 import net.chat.service.FriendService;
 import net.chat.service.UserService;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -19,6 +23,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,9 +40,10 @@ public class ConversationRestControllerTest extends BaseRestControllerTest {
     private static final String PASSWORD = "password";
     private static final String EMAIL = "test@test.pl";
     public static final String FRIEND_NAME = "friendName";
+    private static final String CONVERSATION_NAME = "ConversationName";
 
     @Autowired
-    private FriendRestController objectUnderTest;
+    private ConversationRestController objectUnderTest;
 
     @Autowired
     TokenService tokenService;
@@ -55,33 +61,94 @@ public class ConversationRestControllerTest extends BaseRestControllerTest {
     UserDao userDao;
 
     @Autowired
-    GroupDao groupDao;
+    ConversationDao conversationDao;
+
+    @Autowired
+    UserConversationDao userConversationDao;
 
     @Override
-    public FriendRestController getObjectUnderTest() {
+    public ConversationRestController getObjectUnderTest() {
         return objectUnderTest;
     }
 
-    //    @Test
-    public void addFriendInvalidAndNoAuthHeader() throws Exception {
-        testInvalidAndNullToken(post("/friends/add/1"));
+    @Test
+    public void getConversationInvalidAndNoAuthHeader() throws Exception {
+        testInvalidAndNullToken(get("/conversations/1"));
     }
 
-    //    @Test
-    public void addFriendSuccess() throws Exception {
+    @Test
+    public void createConversationWithMysellf() throws Exception {
         //given
         UserEntity logged = registerUser(USERNAME, EMAIL, PASSWORD);
         String token = userService.login(logged);
-        UserEntity user = registerUser(FRIEND_NAME, EMAIL, PASSWORD);
-        Long id = user.getId();
+        Long id = logged.getId();
 
         //when
-        ResultActions result = mock.perform(post("/friends/add/" + id).header(AUTH_TOKEN_HEADER, token));
+        ResultActions result = mock.perform(get("/conversations/" + id).header(AUTH_TOKEN_HEADER, token));
+        ConversationResponse conversation = responseFromJson(result, ConversationResponse.class);
 
         //then
         result.andExpect(status().isOk());
-        assertThat(friendService.isMyFriend(user)).isTrue();
+        assertThat(conversationDao.findAll()).hasSize(1);
+        assertThat(userConversationDao.findAll()).hasSize(1);
+        assertThat(conversation.getUsers().get(0).name).isEqualTo(USERNAME);
     }
+
+    @Test
+    public void getConversationWithMysellf() throws Exception {
+        //given
+        UserEntity logged = registerUser(USERNAME, EMAIL, PASSWORD);
+        ConversationEntity conversationEntity = new ConversationEntity().setName(CONVERSATION_NAME).setUsers(logged);
+        conversationDao.persist(conversationEntity);
+        String token = userService.login(logged);
+        Long id = logged.getId();
+
+        //when
+        ResultActions result = mock.perform(get("/conversations/" + id).header(AUTH_TOKEN_HEADER, token));
+        ConversationResponse conversation = responseFromJson(result, ConversationResponse.class);
+
+        //then
+        result.andExpect(status().isOk());
+        assertThat(conversation.getName()).isEqualTo(CONVERSATION_NAME);
+        assertThat(conversation.getUsers().get(0).name).isEqualTo(USERNAME);
+    }
+
+    @Test
+    public void createConversation() throws Exception {
+        //given
+        UserEntity logged = registerUser("me", EMAIL, PASSWORD);
+        UserEntity interlocutor = registerUser("interlocutor", EMAIL, PASSWORD);
+        String token = userService.login(logged);
+        Long id = interlocutor.getId();
+
+        //when
+        ResultActions result = mock.perform(get("/conversations/" + id).header(AUTH_TOKEN_HEADER, token));
+        ConversationResponse conversation = responseFromJson(result, ConversationResponse.class);
+
+        //then
+        result.andExpect(status().isOk());
+        assertThat(conversationDao.findAll()).hasSize(1);
+        assertThat(userConversationDao.findAll()).hasSize(2);
+        assertThat(conversation.getUsers().get(0).name).isEqualTo("me");
+        assertThat(conversation.getUsers().get(1).name).isEqualTo("interlocutor");
+    }
+
+    @Test
+    public void createConversationUserNotExists() throws Exception {
+        //given
+        UserEntity logged = registerUser("me", EMAIL, PASSWORD);
+        String token = userService.login(logged);
+        Long notExistingId = 123L;
+
+        //when
+        ResultActions result = mock.perform(get("/conversations/" + notExistingId).header(AUTH_TOKEN_HEADER, token));
+        ResponseError response = responseFromJson(result, ResponseError.class);
+
+        //then
+        result.andExpect(status().isBadRequest());
+        assertThat(response.getId()).isEqualTo(Errors.USER_NOT_EXISTS.getId());
+    }
+
 
     //    @Test
     public void addFriendAlreadyAFriend() throws Exception {

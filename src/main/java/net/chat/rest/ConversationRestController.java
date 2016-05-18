@@ -5,11 +5,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import net.chat.config.authentication.TokenService;
+import net.chat.entity.ConversationEntity;
 import net.chat.logging.LogService;
+import net.chat.rest.dto.ConversationResponse;
 import net.chat.rest.dto.OnlineResponse;
 import net.chat.rest.dto.UserResponse;
 import net.chat.rest.message.ResponseError;
 import net.chat.rest.message.RestResponse;
+import net.chat.service.ConversationService;
 import net.chat.service.FriendService;
 import net.chat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +27,8 @@ import java.util.Random;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/friends")
-public class FriendRestController extends RestExceptionHandler {
+@RequestMapping("/conversations")
+public class ConversationRestController extends RestExceptionHandler {
     @Autowired
     private LogService logger;
 
@@ -38,16 +41,21 @@ public class FriendRestController extends RestExceptionHandler {
     @Autowired
     TokenService tokenService;
 
-    @RequestMapping(path = "/add/{id}", method = RequestMethod.POST, produces = "application/json")
+    @Autowired
+    ConversationService conversationService;
+
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET, produces = "application/json")
     @ApiImplicitParam(name = "X-Auth-Token", value = "Authorization token", dataType = "string", paramType = "header")
-    @ApiOperation(value = "Adds friend of logged user")
+    @ApiOperation(value = "Returns conversation with given user")
     @ApiResponses({
             @ApiResponse(code = 400, message = "Failure", response = ResponseError.class),
             @ApiResponse(code = 401, message = "Unauthorized")})
-    public RestResponse register(@PathVariable Long id) {
-        logger.debug("add friend: " + id);
-        friendService.addFriend(id);
-        return RestResponse.with("Friend added succesfully.");
+    public ConversationResponse get(@PathVariable Long id) {
+        logger.debug("get conversation: " + id);
+
+        ConversationEntity conversation = conversationService.getOrCreateConversationWithUser(id);
+
+        return ConversationResponse.fromEntity(conversation);
     }
 
     @RequestMapping(path = "/delete/{id}", method = RequestMethod.DELETE, produces = "application/json")

@@ -20,7 +20,7 @@ public class SearchUserParams {
 
     @Override
     public String toString() {
-        return "UserWithoutPasswordResponse{" +
+        return "UserResponse{" +
                 ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 '}';

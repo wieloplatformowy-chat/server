@@ -99,12 +99,12 @@ public class UserRestController extends RestExceptionHandler {
     @ApiResponses({
             @ApiResponse(code = 400, message = "Failure", response = ResponseError.class),
             @ApiResponse(code = 401, message = "Unauthorized")})
-    public UserWithoutPasswordResponse whoAmI() {
+    public UserResponse whoAmI() {
         logger.debug("whoami");
 
         UserEntity loggedUser = userService.getLoggedUser();
 
-        return UserWithoutPasswordResponse.fromEntity(loggedUser);
+        return UserResponse.fromEntity(loggedUser);
     }
 
     @RequestMapping(path = "/logout", method = RequestMethod.GET, produces = "application/json")
@@ -127,10 +127,10 @@ public class UserRestController extends RestExceptionHandler {
     @ApiResponses({
             @ApiResponse(code = 400, message = "Failure", response = ResponseError.class),
             @ApiResponse(code = 401, message = "Unauthorized")})
-    public List<UserWithoutPasswordResponse> search(@RequestBody SearchUserParams search) {
+    public List<UserResponse> search(@RequestBody SearchUserParams search) {
         logger.debug("search for: " + search);
 
-        List<UserWithoutPasswordResponse> result = userService.search(search.name, search.email);
+        List<UserResponse> result = userService.search(search.name, search.email);
 
         return result;
     }
