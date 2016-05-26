@@ -60,6 +60,7 @@ public class MessageService {
         userConversationDao.getEm().merge(userConversation);
     }
 
+    @Transactional
     public List<MessageResponse> last20(Long conversationId) {
         userService.throwIfNotLoggedIn();
 
