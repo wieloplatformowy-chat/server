@@ -9,6 +9,7 @@
         <class>net.chat.entity.FriendEntity</class>
         <class>net.chat.entity.ConversationEntity</class>
         <class>net.chat.entity.UserConversationEntity</class>
+        <class>net.chat.entity.MessageEntity</class>
         <class>net.chat.logging.LogEntity</class>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>

@@ -87,7 +87,7 @@
         <subsystem xmlns="urn:jboss:domain:datasources:1.0">
             <datasources>
                 <datasource jndi-name="java:jboss/datasources/ExampleDS" enabled="true" use-java-context="true" pool-name="H2DS">
-                    <connection-url>jdbc:h2:${jboss.server.data.dir}/test;DB_CLOSE_DELAY=-1</connection-url>
+                    <connection-url>jdbc:h2:${jboss.server.date.dir}/test;DB_CLOSE_DELAY=-1</connection-url>
                     <driver>h2</driver>
                     <security>
                         <user-name>sa</user-name>
@@ -174,7 +174,7 @@
             </passivation-stores>
             <async thread-pool-name="default"/>
             <timer-service thread-pool-name="default">
-                <data-store path="timer-service-data" relative-to="jboss.server.data.dir"/>
+                <date-store path="timer-service-date" relative-to="jboss.server.date.dir"/>
             </timer-service>
             <remote connector-ref="remoting-connector" thread-pool-name="default"/>
             <thread-pools>

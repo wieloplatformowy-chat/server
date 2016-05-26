@@ -314,7 +314,7 @@
 						{fields: "birthday,context,email,first_name,gender,hometown,link,location,id,about,age_range,picture,bio,middle_name,name,timezone,website,work"},
 						function (response) {
 							console.log(response);
-							$("#zdjecie").empty().append('<img src="' + response.picture.data.url + '"> ');
+							$("#zdjecie").empty().append('<img src="' + response.picture.date.url + '"> ');
 							$("#nazwa").empty().append(response.name);
 							$("#id").empty().append(response.id);
 							$("#plec").empty().append(response.gender);

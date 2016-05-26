@@ -12,7 +12,8 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "UserConversations", uniqueConstraints = @UniqueConstraint(columnNames = {"user", "conversation"}))
-@NamedQueries({@NamedQuery(name = "UserConversations.findAll", query = "SELECT u FROM UserConversationEntity u")})
+@NamedQueries({@NamedQuery(name = "UserConversations.findAll", query = "SELECT u FROM UserConversationEntity u"),
+        @NamedQuery(name = "UserConversations.findByUserAndConversation", query = "SELECT u FROM UserConversationEntity u WHERE u.user = :user AND u.conversation = :conversation")})
 public class UserConversationEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

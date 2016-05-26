@@ -18,7 +18,5 @@ public final class RestAuthenticationEntryPoint implements AuthenticationEntryPo
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-        System.out.println("DUPA2");
-        System.out.println("DUPA2");
     }
 }

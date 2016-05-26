@@ -73,6 +73,7 @@ public class ConversationService {
         userService.throwIfNotLoggedIn();
         throwIfCredentialsNotExists(groupId, userIds);
         ConversationEntity conversation = getConversationContainingUserOrThrow(groupId);
+        throwIfNotGroup(conversation);
 
         for (Long id : userIds) {
             UserEntity userEntity = userService.findById(id);
@@ -86,11 +87,12 @@ public class ConversationService {
         userService.throwIfNotLoggedIn();
         throwIfCredentialsNotExists(groupId, newName);
         ConversationEntity conversation = getConversationContainingUserOrThrow(groupId);
+        throwIfNotGroup(conversation);
         conversation.setName(newName);
         conversationDao.persist(conversation);
     }
 
-    private ConversationEntity getConversationContainingUserOrThrow(Long groupId) {
+    public ConversationEntity getConversationContainingUserOrThrow(Long groupId) {
         UserEntity loggedUser = userService.getLoggedUser();
 
         Optional<ConversationEntity> conversationOptional = conversationDao.findById(groupId);
@@ -102,6 +104,11 @@ public class ConversationService {
             throw new GroupNotExistsException("Group with id: " + groupId + " not exists");
 
         return conversation;
+    }
+
+    public void throwIfNotGroup(ConversationEntity conversationEntity) {
+        if (!conversationEntity.isGroup())
+            throw new GroupNotExistsException("Conversation with id: " + conversationEntity.getId() + " is not a group");
     }
 
     @Transactional
