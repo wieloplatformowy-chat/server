@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  * @since 30.03.2016
  */
 @Entity
-@Table(name = "Logs")
+@Table(name = "Logs2")
 @NamedQueries({@NamedQuery(name = "LogEntity.findAll", query = "SELECT l FROM LogEntity l")})
 public class LogEntity implements Serializable {
     private static final long serialVersionUID = 1L;
