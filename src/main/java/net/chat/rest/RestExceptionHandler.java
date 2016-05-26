@@ -70,6 +70,13 @@ public class RestExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(GroupNotExistsException.class)
+    public ResponseError handleCNException(GroupNotExistsException e) throws Throwable {
+        logger.error(e.getMessage());
+        return ResponseError.from(Errors.GROUP_NOT_EXISTS);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseError handleJSONException(HttpMessageNotReadableException e) throws Throwable {
         logger.error(e.getMessage());

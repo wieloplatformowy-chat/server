@@ -14,7 +14,8 @@ public enum Errors {
     CREDENTIALS_NOT_PROVIDED(104, "Username or password is null."),
     LOGIN_REQUIRED(105, "You are not logged in. Authentication token is invalid, null or expired."),
     ALREADY_A_FRIEND(106, "This user has been added as your friend before."),
-    NOT_A_FRIEND(107, "This user is not your friend.");
+    NOT_A_FRIEND(107, "This user is not your friend."),
+    GROUP_NOT_EXISTS(108, "Group with given id does not exists");
 
     Errors(int id, String message) {
         this.id = id;

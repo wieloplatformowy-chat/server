@@ -19,15 +19,12 @@ public class ConversationResponse {
     @ApiModelProperty(required = true, position = 1)
     private String name;
     @ApiModelProperty(required = true, position = 2)
-    private boolean group;
-    @ApiModelProperty(required = true, position = 3)
     private List<UserResponse> users;
 
     public static ConversationResponse fromEntity(ConversationEntity conversation) {
         return new ConversationResponse()
                 .setId(conversation.getId())
                 .setName(conversation.getName())
-                .setGroup(conversation.isGroup())
                 .setUsersFromEntity(conversation.getUsers());
     }
 
@@ -46,15 +43,6 @@ public class ConversationResponse {
 
     public ConversationResponse setName(String name) {
         this.name = name;
-        return this;
-    }
-
-    public boolean isGroup() {
-        return group;
-    }
-
-    public ConversationResponse setGroup(boolean group) {
-        this.group = group;
         return this;
     }
 
@@ -82,7 +70,6 @@ public class ConversationResponse {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("name", name)
-                .add("group", group)
                 .add("users", users)
                 .toString();
     }
@@ -92,14 +79,13 @@ public class ConversationResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConversationResponse that = (ConversationResponse) o;
-        return group == that.group &&
-                java.util.Objects.equals(id, that.id) &&
+        return java.util.Objects.equals(id, that.id) &&
                 java.util.Objects.equals(name, that.name) &&
                 java.util.Objects.equals(users, that.users);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(id, name, group, users);
+        return java.util.Objects.hash(id, name, users);
     }
 }

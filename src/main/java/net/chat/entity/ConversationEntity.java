@@ -15,7 +15,11 @@ import java.util.List;
  */
 @Entity
 @Table(name = "Conversations")
-@NamedQueries({@NamedQuery(name = "Conversations.findAll", query = "SELECT c FROM ConversationEntity c")})
+@NamedQueries({@NamedQuery(name = "Conversations.findAll", query = "SELECT c FROM ConversationEntity c"),
+        @NamedQuery(name = "Conversations.myGroups", query = "SELECT c FROM ConversationEntity c JOIN c.users u WHERE c.group = true AND u = :me"),
+        @NamedQuery(name = "Conversations.withMe", query = "SELECT c FROM ConversationEntity c JOIN c.users u  WHERE c.users.size = 1 AND u = :me"),
+        @NamedQuery(name = "Conversations.with", query = "SELECT c FROM ConversationEntity c JOIN c.users u WHERE c.group = false AND u = :me AND c IN " +
+                "(SELECT cc FROM ConversationEntity cc JOIN cc.users uu WHERE cc.group = false AND uu = :user)")})
 public class ConversationEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

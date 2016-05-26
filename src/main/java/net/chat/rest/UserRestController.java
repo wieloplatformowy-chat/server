@@ -81,6 +81,7 @@ public class UserRestController extends RestExceptionHandler {
         return RestResponse.with("User registered succesfully.");
     }
 
+    @ApiIgnore
     @RequestMapping(path = "/delete", method = RequestMethod.DELETE, produces = "application/json")
     @ApiImplicitParam(name = "X-Auth-Token", value = "Authorization token", dataType = "string", paramType = "header")
     @ApiOperation(value = "Delete user", notes = "throws: UNKNOWN_ERROR, INVALID_JSON")

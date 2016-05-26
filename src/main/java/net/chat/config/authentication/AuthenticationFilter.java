@@ -45,6 +45,7 @@ public class AuthenticationFilter extends GenericFilterBean {
         } catch (Exception e) {
             SecurityContextHolder.clearContext();
             chain.doFilter(request, response);
+//            throw e;
         }
     }
     private HttpServletRequest asHttp(ServletRequest request) {
