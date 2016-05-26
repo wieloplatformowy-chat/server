@@ -10,10 +10,10 @@
            can find it in the source at src/main/webapp/WEB-INF/spring-quickstart-ds.xml -->
 
         <!--local jboss-->
-        <!--<jta-date-source>java:jboss/datasources/ExampleDS</jta-date-source>-->
+        <!--<jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>-->
 
         <!--openshift mysql-->
-        <jta-date-source>java:jboss/datasources/MySQLDS</jta-date-source>
+        <jta-data-source>java:jboss/datasources/MySQLDS</jta-data-source>
 
         <properties>
             <property name="jboss.entity.manager.factory.jndi.name" value="java:jboss/spring-quickstart/persistence"/>
