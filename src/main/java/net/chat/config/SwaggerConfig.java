@@ -34,7 +34,7 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
                 .title("Chat Backend")
                 .description("Api documentation")
-                .version("0.2.1 - Friends")
+                .version("0.8.0 - Messages")
                 .contact("projektchat22@gmail.com")
                 .license("Copyright © 2016")
                 .build();
