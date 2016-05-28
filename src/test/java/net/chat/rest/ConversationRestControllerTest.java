@@ -59,7 +59,7 @@ public class ConversationRestControllerTest extends BaseRestControllerTest {
     }
 
     @Test
-    public void createConversationWithMysellf() throws Exception {
+    public void createConversationWithMyself() throws Exception {
         //given
         UserEntity logged = registerUser(USERNAME, EMAIL, PASSWORD);
         String token = userService.login(logged);
@@ -77,7 +77,7 @@ public class ConversationRestControllerTest extends BaseRestControllerTest {
     }
 
     @Test
-    public void getConversationWithMysellf() throws Exception {
+    public void getConversationWithMyself() throws Exception {
         //given
         UserEntity logged = registerUser(USERNAME, EMAIL, PASSWORD);
         ConversationEntity conversationEntity = new ConversationEntity().setName(CONVERSATION_NAME).setUsers(logged);

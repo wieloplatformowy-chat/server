@@ -5,7 +5,7 @@ package net.chat.exception;
  * @since 03.05.2016
  */
 public class InvalidPasswordException extends IllegalArgumentException {
-    public InvalidPasswordException(String mesaage) {
-        super(mesaage);
+    public InvalidPasswordException(String message) {
+        super(message);
     }
 }

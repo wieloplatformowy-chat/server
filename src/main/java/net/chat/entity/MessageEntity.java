@@ -11,7 +11,12 @@ import java.util.Objects;
 @Entity
 @Table(name = "Messages")
 @NamedQueries({@NamedQuery(name = "Message.findAll", query = "SELECT m FROM MessageEntity m"),
-        @NamedQuery(name = "Message.last20", query = "SELECT m FROM MessageEntity m WHERE m.conversation = :conversation ORDER BY m.date desc"),
+        @NamedQuery(name = "Message.last", query = "SELECT m FROM MessageEntity m WHERE m.conversation = :conversation ORDER BY m.date desc"),
+        @NamedQuery(name = "Message.before", query = "SELECT m FROM MessageEntity m WHERE m.conversation = :conversation AND m.date < :date ORDER BY m.date desc"),
+        @NamedQuery(name = "Message.unreadGroupsId", query = "SELECT c.id FROM ConversationEntity c JOIN c.users us WHERE us = :user AND c IN" +
+                "(SELECT u.conversation FROM UserConversationEntity u LEFT JOIN u.lastSeenPost lp WHERE u.user = :user AND u.conversation = c AND " +
+                "((u.lastSeenPost IS NULL AND EXISTS (SELECT m FROM MessageEntity m WHERE m.conversation = c)) OR " +
+                "lp.date < (SELECT MAX(m.date) FROM MessageEntity m WHERE m.conversation = c)))"),
         @NamedQuery(name = "Message.findByNameLike", query = "SELECT u FROM UserEntity u WHERE lower(u.name) like lower(:name)"),
         @NamedQuery(name = "Message.findByEmailLike", query = "SELECT u FROM UserEntity u WHERE lower(u.email) like lower(:email)")})
 public class MessageEntity implements Serializable {
@@ -26,7 +31,7 @@ public class MessageEntity implements Serializable {
 
     @NotNull
     @Column(columnDefinition = "mediumtext")
-    private String messaage;
+    private String message;
 
     @NotNull
     @ManyToOne
@@ -58,12 +63,12 @@ public class MessageEntity implements Serializable {
         return this;
     }
 
-    public String getMessaage() {
-        return messaage;
+    public String getMessage() {
+        return message;
     }
 
-    public MessageEntity setMessaage(String messaage) {
-        this.messaage = messaage;
+    public MessageEntity setMessage(String message) {
+        this.message = message;
         return this;
     }
 
@@ -92,14 +97,14 @@ public class MessageEntity implements Serializable {
         MessageEntity that = (MessageEntity) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(date, that.date) &&
-                Objects.equals(messaage, that.messaage) &&
+                Objects.equals(message, that.message) &&
                 Objects.equals(user, that.user) &&
                 Objects.equals(conversation, that.conversation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, date, messaage, user, conversation);
+        return Objects.hash(id, date, message, user, conversation);
     }
 
     @Override
@@ -107,7 +112,7 @@ public class MessageEntity implements Serializable {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("data", date)
-                .add("messaage", messaage)
+                .add("message", message)
                 .add("userEntity", user)
                 .add("conversationEntity", conversation)
                 .toString();

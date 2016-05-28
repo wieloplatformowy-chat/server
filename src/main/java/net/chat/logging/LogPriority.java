@@ -5,5 +5,5 @@ package net.chat.logging;
  * @since 30.03.2016
  */
 public enum LogPriority {
-    DEBUG, INFO, WARN, ERROR;
+    DEBUG, INFO, WARN, ERROR
 }

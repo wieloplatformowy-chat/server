@@ -8,7 +8,7 @@ public class DataResponse<DATA> extends BaseResponse {
     protected DATA data;
 
     public static BaseResponse success() {
-        throw new UnsupportedOperationException("succes without a data is not allowed.");
+        throw new UnsupportedOperationException("Success without a data is not allowed.");
     }
 
     public static <D> DataResponse<D> success(D data) {

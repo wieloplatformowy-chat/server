@@ -47,7 +47,7 @@ public class FriendRestController extends RestExceptionHandler {
     public RestResponse register(@PathVariable Long id) {
         logger.debug("add friend: " + id);
         friendService.addFriend(id);
-        return RestResponse.with("Friend added succesfully.");
+        return RestResponse.with("Friend added successfully.");
     }
 
     @RequestMapping(path = "/delete/{id}", method = RequestMethod.DELETE, produces = "application/json")
@@ -59,7 +59,7 @@ public class FriendRestController extends RestExceptionHandler {
     public RestResponse delete(@PathVariable Long id) {
         logger.debug("delete friend: " + id);
         friendService.deleteFriend(id);
-        return RestResponse.with("Friend added succesfully.");
+        return RestResponse.with("Friend added successfully.");
     }
 
     @RequestMapping(path = "/my", method = RequestMethod.GET, produces = "application/json")

@@ -361,7 +361,7 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
-			<!-- Deployent on AS from console -->
+			<!-- Deployment on AS from console -->
 			<plugin>
 				<groupId>org.jboss.as.plugins</groupId>
 				<artifactId>jboss-as-maven-plugin</artifactId>

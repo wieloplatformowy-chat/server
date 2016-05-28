@@ -38,7 +38,7 @@ public class MessageRestController extends RestExceptionHandler {
     public RestResponse send(@RequestBody SendMessageParams params) {
         logger.debug("send message: " + params);
         messageService.send(params.getConversationId(), params.getMessage());
-        return RestResponse.with("Message sent succesfully.");
+        return RestResponse.with("Message sent successfully.");
     }
 
     @RequestMapping(path = "/last/{id}", method = RequestMethod.GET, produces = "application/json")
@@ -53,41 +53,27 @@ public class MessageRestController extends RestExceptionHandler {
         return result;
     }
 
-//    @RequestMapping(path = "/delete/{id}", method = RequestMethod.DELETE, produces = "application/json")
-//    @ApiImplicitParam(name = "X-Auth-Token", value = "Authorization token", dataType = "string", paramType = "header")
-//    @ApiOperation(value = "Removes friend of logged user")
-//    @ApiResponses({
-//            @ApiResponse(code = 400, message = "Failure", response = ResponseError.class),
-//            @ApiResponse(code = 401, message = "Unauthorized")})
-//    public RestResponse delete(@PathVariable Long id) {
-//        logger.debug("delete friend: " + id);
-//        friendService.deleteFriend(id);
-//        return RestResponse.with("Friend added succesfully.");
-//    }
+    @RequestMapping(path = "/before/{conversationId}/{messageId}", method = RequestMethod.GET, produces = "application/json")
+    @ApiImplicitParam(name = "X-Auth-Token", value = "Authorization token", dataType = "string", paramType = "header")
+    @ApiOperation(value = "Return 20 messages from the conversation older than given message")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Failure", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Unauthorized")})
+    public List<MessageResponse> before(@PathVariable Long conversationId, @PathVariable Long messageId) {
+        logger.debug("before messages: " + conversationId + "/" + messageId);
+        List<MessageResponse> result = messageService.before20(conversationId, messageId);
+        return result;
+    }
 
-//    @RequestMapping(path = "/my", method = RequestMethod.GET, produces = "application/json")
-//    @ApiImplicitParam(name = "X-Auth-Token", value = "Authorization token", dataType = "string", paramType = "header")
-//    @ApiOperation(value = "Lists all friends of logged user")
-//    @ApiResponses({
-//            @ApiResponse(code = 400, message = "Failure", response = ResponseError.class),
-//            @ApiResponse(code = 401, message = "Unauthorized")})
-//    public List<UserResponse> my() {
-//        logger.debug("my friends");
-//        List<UserResponse> result = friendService.myFriends();
-//        return result;
-//    }
-
-//    @RequestMapping(path = "/online/{id}", method = RequestMethod.GET, produces = "application/json")
-//    @ApiImplicitParam(name = "X-Auth-Token", value = "Authorization token", dataType = "string", paramType = "header")
-//    @ApiOperation(value = "Return whether requested user is online.")
-//    @ApiResponses({
-//            @ApiResponse(code = 400, message = "Failure", response = ResponseError.class),
-//            @ApiResponse(code = 401, message = "Unauthorized")})
-//    public OnlineResponse online(@PathVariable Long id) {
-//        logger.debug("check online: : " + id);
-//
-//        userService.throwIfNotLoggedIn();
-//
-//        return new OnlineResponse().setOnline(new Random().nextBoolean());
-//    }
+    @RequestMapping(path = "/unread", method = RequestMethod.GET, produces = "application/json")
+    @ApiImplicitParam(name = "X-Auth-Token", value = "Authorization token", dataType = "string", paramType = "header")
+    @ApiOperation(value = "Return ID's of groups with unread messages")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Failure", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Unauthorized")})
+    public List<Long> unread() {
+        logger.debug("unread messages");
+        List<Long> result = messageService.unread();
+        return result;
+    }
 }

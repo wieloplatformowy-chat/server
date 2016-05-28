@@ -5,7 +5,6 @@ import com.google.common.collect.FluentIterable;
 import net.chat.entity.UserEntity;
 import net.chat.exception.AlreadyAFriendException;
 import net.chat.exception.NotAFriendException;
-import net.chat.exception.NullCredentialsException;
 import net.chat.repository.FriendDao;
 import net.chat.rest.dto.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +25,6 @@ public class FriendService {
 
     @Autowired
     FriendDao friendDao;
-
-    @Transactional
-    public void register(UserEntity user) {
-//        throwIfCredentialsNotExists(user);
-
-//        if (checkIfUserWithNameExists(user))
-//            throw new UserAlreadyExistsException("UserEntity: " + user.getName() + " already exists");
-//
-//        userDao.persist(user);
-    }
 
     @Transactional
     public void addFriend(Long friendId) {
@@ -59,6 +48,7 @@ public class FriendService {
         friendDao.deleteFriend(loggedUser, friend);
     }
 
+    @Transactional
     public List<UserResponse> myFriends() {
         UserEntity loggedUser = userService.getLoggedUser();
 
@@ -84,15 +74,5 @@ public class FriendService {
     public boolean isMyFriend(UserEntity user) {
         UserEntity loggedUser = userService.getLoggedUser();
         return friendDao.isFriend(loggedUser, user);
-    }
-
-    private void throwIfCredentialsNotExists(String name, String password) {
-        if (name == null || password == null)
-            throw new NullCredentialsException("Credentials are null");
-    }
-
-    private void throwIfCredentialsNotExists(Object credential) {
-        if (credential == null)
-            throw new NullCredentialsException("Credentials are null");
     }
 }

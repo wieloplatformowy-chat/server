@@ -5,7 +5,7 @@ package net.chat.rest.message;
  * @since 29.03.2016
  */
 public enum Errors {
-    UNKNOWN_ERROR(1, "Unknown error occured."),
+    UNKNOWN_ERROR(1, "Unknown error occurred."),
     INVALID_JSON(2, "Invalid JSON in request body."),
 
     USER_NOT_EXISTS(101, "There is no registered user with given name."),
@@ -15,7 +15,8 @@ public enum Errors {
     LOGIN_REQUIRED(105, "You are not logged in. Authentication token is invalid, null or expired."),
     ALREADY_A_FRIEND(106, "This user has been added as your friend before."),
     NOT_A_FRIEND(107, "This user is not your friend."),
-    GROUP_NOT_EXISTS(108, "Group with given id does not exists");
+    CONVERSATION_NOT_EXISTS(108, "Conversation or Group with given id does not exists"),
+    MESSAGE_NOT_EXISTS(109, "Message with given ID does not exists within this conversation");
 
     Errors(int id, String message) {
         this.id = id;

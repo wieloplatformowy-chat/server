@@ -78,7 +78,7 @@ public class UserRestController extends RestExceptionHandler {
         UserEntity user = registerParams.toUserWithNullId();
         logger.debug("registering user: " + user);
         userService.register(user);
-        return RestResponse.with("User registered succesfully.");
+        return RestResponse.with("User registered successfully.");
     }
 
     @ApiIgnore
@@ -91,7 +91,7 @@ public class UserRestController extends RestExceptionHandler {
     public RestResponse delete(@RequestBody PasswordParam restData) {
         logger.debug("deleting user");
         userService.delete(restData.getPassword());
-        return RestResponse.with("User deleted succesfully.");
+        return RestResponse.with("User deleted successfully.");
     }
 
     @RequestMapping(path = "/whoami", method = RequestMethod.GET, produces = "application/json")
@@ -119,7 +119,7 @@ public class UserRestController extends RestExceptionHandler {
 
         userService.logout();
 
-        return RestResponse.with("Logged out succesfully.");
+        return RestResponse.with("Logged out successfully.");
     }
 
     @RequestMapping(path = "/search", method = RequestMethod.POST, produces = "application/json")

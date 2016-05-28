@@ -1,7 +1,6 @@
 package net.chat.config.authentication;
 
 import com.google.common.base.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -22,7 +21,6 @@ import java.io.IOException;
 
 public class AuthenticationFilter extends GenericFilterBean {
 
-    @Autowired
     protected AuthenticationManager authenticationManager;
 
     public AuthenticationFilter(AuthenticationManager authenticationManager) {

@@ -101,7 +101,7 @@ public class GroupRestControllerTest extends BaseRestControllerTest {
         ConversationEntity conversationEntity = new ConversationEntity().setUsers(logged).setGroup(true);
         conversationDao.persist(conversationEntity);
 
-        InviteToGroupParams params = new InviteToGroupParams().setGroupId(conversationEntity.getId()).setUserIds(new Long[]{user1.getId(), user2.getId()});
+        InviteToGroupParams params = new InviteToGroupParams().setGroupId(conversationEntity.getId()).setUserIds(user1.getId(), user2.getId());
 
         //when
         ResultActions result = mock.perform(post("/groups/invite").content(toJson(params)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
@@ -123,7 +123,7 @@ public class GroupRestControllerTest extends BaseRestControllerTest {
         String token = userService.login(logged);
 
         Long notExistingGroupId = 123L;
-        InviteToGroupParams params = new InviteToGroupParams().setGroupId(notExistingGroupId).setUserIds(new Long[]{user1.getId()});
+        InviteToGroupParams params = new InviteToGroupParams().setGroupId(notExistingGroupId).setUserIds(user1.getId());
 
         //when
         ResultActions result = mock.perform(post("/groups/invite").content(toJson(params)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
@@ -131,7 +131,7 @@ public class GroupRestControllerTest extends BaseRestControllerTest {
 
         //then
         result.andExpect(status().isBadRequest());
-        assertThat(response.getId()).isEqualTo(Errors.GROUP_NOT_EXISTS.getId());
+        assertThat(response.getId()).isEqualTo(Errors.CONVERSATION_NOT_EXISTS.getId());
     }
 
     @Test
@@ -144,7 +144,7 @@ public class GroupRestControllerTest extends BaseRestControllerTest {
         conversationDao.persist(conversationEntity);
 
         Long notExistingUserId = 123L;
-        InviteToGroupParams params = new InviteToGroupParams().setGroupId(conversationEntity.getId()).setUserIds(new Long[]{notExistingUserId});
+        InviteToGroupParams params = new InviteToGroupParams().setGroupId(conversationEntity.getId()).setUserIds(notExistingUserId);
 
         //when
         ResultActions result = mock.perform(post("/groups/invite").content(toJson(params)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
@@ -166,7 +166,7 @@ public class GroupRestControllerTest extends BaseRestControllerTest {
         ConversationEntity conversationEntity = new ConversationEntity().setUsers(user1).setGroup(true);
         conversationDao.persist(conversationEntity);
 
-        InviteToGroupParams params = new InviteToGroupParams().setGroupId(conversationEntity.getId()).setUserIds(new Long[]{user1.getId(), user2.getId()});
+        InviteToGroupParams params = new InviteToGroupParams().setGroupId(conversationEntity.getId()).setUserIds(user1.getId(), user2.getId());
 
         //when
         ResultActions result = mock.perform(post("/groups/invite").content(toJson(params)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
@@ -174,7 +174,7 @@ public class GroupRestControllerTest extends BaseRestControllerTest {
 
         //then
         result.andExpect(status().isBadRequest());
-        assertThat(response.getId()).isEqualTo(Errors.GROUP_NOT_EXISTS.getId());
+        assertThat(response.getId()).isEqualTo(Errors.CONVERSATION_NOT_EXISTS.getId());
     }
 
     @Test
@@ -232,7 +232,7 @@ public class GroupRestControllerTest extends BaseRestControllerTest {
 
         //then
         result.andExpect(status().isBadRequest());
-        assertThat(response.getId()).isEqualTo(Errors.GROUP_NOT_EXISTS.getId());
+        assertThat(response.getId()).isEqualTo(Errors.CONVERSATION_NOT_EXISTS.getId());
     }
 
     @Test
@@ -253,7 +253,7 @@ public class GroupRestControllerTest extends BaseRestControllerTest {
 
         //then
         result.andExpect(status().isBadRequest());
-        assertThat(response.getId()).isEqualTo(Errors.GROUP_NOT_EXISTS.getId());
+        assertThat(response.getId()).isEqualTo(Errors.CONVERSATION_NOT_EXISTS.getId());
     }
 
     @Test

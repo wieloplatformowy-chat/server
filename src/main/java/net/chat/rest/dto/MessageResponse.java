@@ -12,7 +12,7 @@ public class MessageResponse implements Serializable {
 
     private Long id;
     private Timestamp date;
-    private String messaage;
+    private String message;
     private Long userId;
     private Long conversationId;
 
@@ -20,7 +20,7 @@ public class MessageResponse implements Serializable {
         return new MessageResponse()
                 .setId(entity.getId())
                 .setDate(entity.getDate())
-                .setMessaage(entity.getMessaage())
+                .setMessage(entity.getMessage())
                 .setUserId(entity.getUser().getId())
                 .setConversationId(entity.getConversation().getId());
     }
@@ -43,12 +43,12 @@ public class MessageResponse implements Serializable {
         return this;
     }
 
-    public String getMessaage() {
-        return messaage;
+    public String getMessage() {
+        return message;
     }
 
-    public MessageResponse setMessaage(String messaage) {
-        this.messaage = messaage;
+    public MessageResponse setMessage(String message) {
+        this.message = message;
         return this;
     }
 
@@ -77,14 +77,14 @@ public class MessageResponse implements Serializable {
         MessageResponse that = (MessageResponse) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(date, that.date) &&
-                Objects.equals(messaage, that.messaage) &&
+                Objects.equals(message, that.message) &&
                 Objects.equals(userId, that.userId) &&
                 Objects.equals(conversationId, that.conversationId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, date, messaage, userId, conversationId);
+        return Objects.hash(id, date, message, userId, conversationId);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class MessageResponse implements Serializable {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("date", date)
-                .add("messaage", messaage)
+                .add("message", message)
                 .add("userId", userId)
                 .add("conversationId", conversationId)
                 .toString();

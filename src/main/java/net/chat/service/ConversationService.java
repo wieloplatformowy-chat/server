@@ -5,7 +5,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import net.chat.entity.ConversationEntity;
 import net.chat.entity.UserEntity;
-import net.chat.exception.GroupNotExistsException;
+import net.chat.exception.ConversationNotExistsException;
 import net.chat.exception.NullCredentialsException;
 import net.chat.repository.ConversationDao;
 import net.chat.repository.UserDao;
@@ -97,18 +97,18 @@ public class ConversationService {
 
         Optional<ConversationEntity> conversationOptional = conversationDao.findById(groupId);
         if (!conversationOptional.isPresent())
-            throw new GroupNotExistsException("Group with id: " + groupId + " not exists");
+            throw new ConversationNotExistsException("Group with id: " + groupId + " not exists");
 
         ConversationEntity conversation = conversationOptional.get();
         if (!conversation.getUsers().contains(loggedUser))
-            throw new GroupNotExistsException("Group with id: " + groupId + " not exists");
+            throw new ConversationNotExistsException("Group with id: " + groupId + " not exists");
 
         return conversation;
     }
 
     public void throwIfNotGroup(ConversationEntity conversationEntity) {
         if (!conversationEntity.isGroup())
-            throw new GroupNotExistsException("Conversation with id: " + conversationEntity.getId() + " is not a group");
+            throw new ConversationNotExistsException("Conversation with id: " + conversationEntity.getId() + " is not a group");
     }
 
     @Transactional

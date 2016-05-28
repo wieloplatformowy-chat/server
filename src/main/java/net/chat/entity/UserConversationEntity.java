@@ -1,5 +1,7 @@
 package net.chat.entity;
 
+import com.google.common.base.MoreObjects;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -31,7 +33,8 @@ public class UserConversationEntity implements Serializable {
     @JoinColumn(name = "conversation", referencedColumnName = "id")
     private ConversationEntity conversation;
 
-    private Long lastSeenPostId;
+    @ManyToOne
+    private MessageEntity lastSeenPost;
 
     private Timestamp lastSeenPostDate;
 
@@ -66,12 +69,12 @@ public class UserConversationEntity implements Serializable {
         return this;
     }
 
-    public Long getLastSeenPostId() {
-        return lastSeenPostId;
+    public MessageEntity getLastSeenPost() {
+        return lastSeenPost;
     }
 
-    public UserConversationEntity setLastSeenPostId(Long lastSeenPostId) {
-        this.lastSeenPostId = lastSeenPostId;
+    public UserConversationEntity setLastSeenPost(MessageEntity lastSeenPost) {
+        this.lastSeenPost = lastSeenPost;
         return this;
     }
 
@@ -95,11 +98,11 @@ public class UserConversationEntity implements Serializable {
 
     @Override
     public String toString() {
-        return com.google.common.base.Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("user", user)
                 .add("conversation", conversation)
-                .add("lastSeenPostId", lastSeenPostId)
+                .add("lastSeenPostId", lastSeenPost)
                 .add("lastSeenPostDate", lastSeenPostDate)
                 .add("userLeft", userLeft)
                 .toString();
@@ -114,12 +117,12 @@ public class UserConversationEntity implements Serializable {
                 Objects.equals(id, that.id) &&
                 Objects.equals(user, that.user) &&
                 Objects.equals(conversation, that.conversation) &&
-                Objects.equals(lastSeenPostId, that.lastSeenPostId) &&
+                Objects.equals(lastSeenPost, that.lastSeenPost) &&
                 Objects.equals(lastSeenPostDate, that.lastSeenPostDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, conversation, lastSeenPostId, lastSeenPostDate, userLeft);
+        return Objects.hash(id, user, conversation, lastSeenPost, lastSeenPostDate, userLeft);
     }
 }

@@ -52,7 +52,7 @@ public class GroupRestController extends RestExceptionHandler {
     public RestResponse invite(@RequestBody InviteToGroupParams params) {
         logger.debug("invite to group: " + params);
         conversationService.inviteToGroup(params.getGroupId(), params.getUserIds());
-        return RestResponse.with("Users invited succesfully.");
+        return RestResponse.with("Users invited successfully.");
     }
 
     @RequestMapping(path = "/rename", method = RequestMethod.POST, produces = "application/json")
@@ -64,7 +64,7 @@ public class GroupRestController extends RestExceptionHandler {
     public RestResponse rename(@RequestBody RenameGroupParams params) {
         logger.debug("rename group: " + params);
         conversationService.renameGroup(params.getGroupId(), params.getNewName());
-        return RestResponse.with("Group renamed succesfully.");
+        return RestResponse.with("Group renamed successfully.");
     }
 
     @RequestMapping(path = "/my", method = RequestMethod.GET, produces = "application/json")
