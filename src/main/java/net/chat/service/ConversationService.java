@@ -33,7 +33,7 @@ public class ConversationService {
     ConversationDao conversationDao;
 
     @Transactional
-    public ConversationEntity getOrCreateConversationWithUser(Long userId) {
+    public ConversationResponse getOrCreateConversationWithUser(Long userId) {
         UserEntity loggedUser = userService.getLoggedUser();
 
         Optional<ConversationEntity> conversationOptional;
@@ -55,7 +55,7 @@ public class ConversationService {
             conversationDao.persist(conversationEntity);
         }
 
-        return conversationEntity;
+        return ConversationResponse.fromEntity(conversationEntity);
     }
 
     @Transactional

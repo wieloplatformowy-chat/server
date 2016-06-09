@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import net.chat.entity.ConversationEntity;
 import net.chat.logging.LogService;
 import net.chat.rest.dto.ConversationResponse;
 import net.chat.rest.message.ResponseError;
@@ -35,8 +34,8 @@ public class ConversationRestController extends RestExceptionHandler {
     public ConversationResponse get(@PathVariable Long id) {
         logger.debug("get conversation: " + id);
 
-        ConversationEntity conversation = conversationService.getOrCreateConversationWithUser(id);
+        ConversationResponse response = conversationService.getOrCreateConversationWithUser(id);
 
-        return ConversationResponse.fromEntity(conversation);
+        return response;
     }
 }

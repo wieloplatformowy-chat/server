@@ -246,7 +246,7 @@ public class UserRestControllerTest extends BaseRestControllerTest {
         UserEntity user2 = registerUser("UserNameTwo", "otherMail", PASSWORD);
         UserEntity user3 = registerUser("nAME", "otherMail", PASSWORD);
         UserEntity firstUser = registerUser("AAFirstUser", "required@test.com", PASSWORD);
-        UserEntity notMatchingUSer = registerUser("NoMatchingName", "na@me.com", PASSWORD);
+        UserEntity notMatchingUSer = registerUser("NoMatchingN4me", "na@me.com", PASSWORD);
         UserEntity logged = registerUser("MeName", "required@test.com", PASSWORD);
         String token = userService.login(logged);
 
