@@ -85,9 +85,10 @@ public class RestExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseError handleJSONException(HttpMessageNotReadableException e) throws Throwable {
+    public HttpMessageNotReadableException handleJSONException(HttpMessageNotReadableException e) throws Throwable {
         logger.error(e.getMessage());
-        return ResponseError.from(Errors.INVALID_JSON);
+        return e;
+//        return ResponseError.from(Errors.INVALID_JSON);
     }
 
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
