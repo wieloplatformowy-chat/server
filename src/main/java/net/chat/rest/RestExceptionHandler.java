@@ -6,6 +6,7 @@ import net.chat.rest.message.Errors;
 import net.chat.rest.message.ResponseError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -82,12 +83,13 @@ public class RestExceptionHandler {
         return ResponseError.from(Errors.MESSAGE_NOT_EXISTS);
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(HttpMessageNotReadableException.class)
-//    public ResponseError handleJSONException(HttpMessageNotReadableException e) throws Throwable {
-//        logger.error(e.getMessage());
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public Object handleJSONException(HttpMessageNotReadableException e) throws Throwable {
+        logger.error(e.getMessage() + com.google.common.base.Throwables.getStackTraceAsString(e));
+        return com.google.common.base.Throwables.getStackTraceAsString(e);
 //        return ResponseError.from(Errors.INVALID_JSON);
-//    }
+    }
 
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
 //    @ExceptionHandler(Throwable.class)
