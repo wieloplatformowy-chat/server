@@ -87,14 +87,13 @@ public class RestExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Object handleJSONException(HttpMessageNotReadableException e) throws Throwable {
         logger.error(e.getMessage() + com.google.common.base.Throwables.getStackTraceAsString(e));
-        return com.google.common.base.Throwables.getStackTraceAsString(e);
-//        return ResponseError.from(Errors.INVALID_JSON);
+        return ResponseError.from(Errors.INVALID_JSON);
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(Throwable.class)
-//    public ResponseError handleException(Throwable throwable) throws Throwable {
-//        logger.error(throwable.getClass().getName() + ": " + throwable.getMessage());
-//        return ResponseError.from(Errors.UNKNOWN_ERROR);
-//    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(Throwable.class)
+    public ResponseError handleException(Throwable throwable) throws Throwable {
+        logger.error(throwable.getClass().getName() + ": " + throwable.getMessage() + "stack: " + com.google.common.base.Throwables.getStackTraceAsString(throwable));
+        return ResponseError.from(Errors.UNKNOWN_ERROR);
+    }
 }
