@@ -3,7 +3,6 @@ package net.chat.config.authentication;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -24,17 +23,17 @@ public class TokenService {
         restApiAuthTokenCache = CacheManager.getInstance().getEhcache("restApiAuthTokenCache");
     }
 
-    @Scheduled(fixedRate = HALF_AN_HOUR_IN_MILLISECONDS)
-    public void evictExpiredTokens() {
-        restApiAuthTokenCache.evictExpiredElements();
-    }
+//    @Scheduled(fixedRate = HALF_AN_HOUR_IN_MILLISECONDS)
+//    public void evictExpiredTokens() {
+//        restApiAuthTokenCache.evictExpiredElements();
+//    }
 
     public String generateNewToken() {
         return UUID.randomUUID().toString();
     }
 
     public void store(String token, Authentication authentication) {
-        TokenService.restApiAuthTokenCache.put(new Element(token, authentication));
+        TokenService.restApiAuthTokenCache.put(new Element(token, authentication, Integer.MAX_VALUE, Integer.MAX_VALUE));
     }
 
     public boolean contains(String token) {

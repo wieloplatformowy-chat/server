@@ -1,6 +1,7 @@
 package net.chat.config.authentication;
 
 import com.google.common.base.Optional;
+import net.chat.exception.InvalidTokenException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -39,12 +40,14 @@ public class AuthenticationFilter extends GenericFilterBean {
             if (token.isPresent()) {
                 processTokenAuthentication(token);
             }
-            chain.doFilter(request, response);
-        } catch (Exception e) {
+//            chain.doFilter(request, response);
+        } catch (InternalAuthenticationServiceException e) {
             SecurityContextHolder.clearContext();
-            chain.doFilter(request, response);
 //            throw e;
+        } catch (InvalidTokenException e) {
+            SecurityContextHolder.clearContext();
         }
+        chain.doFilter(request, response);
     }
     private HttpServletRequest asHttp(ServletRequest request) {
         return (HttpServletRequest) request;
