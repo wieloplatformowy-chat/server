@@ -31,7 +31,7 @@ public class MessageEntity implements Serializable {
 
     @NotNull
     @Column(columnDefinition = "mediumtext")
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     private String message;
 
     @NotNull
