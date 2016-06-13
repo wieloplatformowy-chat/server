@@ -20,6 +20,7 @@ public class LogEntity implements Serializable {
     private Long id;
 
     @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
     private Timestamp data;
 
     private String userName = "null";
