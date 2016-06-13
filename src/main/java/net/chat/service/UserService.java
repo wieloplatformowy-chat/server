@@ -20,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Mariusz Gorzycki
@@ -76,7 +74,16 @@ public class UserService {
         if (!StringUtils.isEmpty(emailFragment))
             byEmailLike = userDao.findByEmailLike(emailFragment);
 
-        return FluentIterable.from(byNameLike).append(byEmailLike).filter(new Predicate<UserEntity>() {
+        Set<UserEntity> set = new TreeSet<>(new Comparator<UserEntity>() {
+            @Override
+            public int compare(UserEntity o1, UserEntity o2) {
+                return (int) (o1.getId() - o2.getId());
+            }
+        });
+        set.addAll(byNameLike);
+        set.addAll(byEmailLike);
+
+        return FluentIterable.from(set).filter(new Predicate<UserEntity>() {
             @Override
             public boolean apply(UserEntity input) {
                 return !input.getName().equals(loggedUser.getName());

@@ -268,6 +268,29 @@ public class UserRestControllerTest extends BaseRestControllerTest {
     }
 
     @Test()
+    public void searchNoDoubleResultWhenLoginSameAsMail() throws Exception {
+        //given
+        UserEntity user1 = registerUser("user", "user@user.pl", PASSWORD);
+        UserEntity user2 = registerUser("test", "otherMail", PASSWORD);
+        UserEntity logged = registerUser("MeName", "required@test.com", PASSWORD);
+        String token = userService.login(logged);
+
+        SearchUserParams search = new SearchUserParams().setName("user").setEmail("user");
+
+        //when
+        ResultActions result = mock.perform(post("/user/search").content(toJson(search)).contentType(MediaType.APPLICATION_JSON).header(AUTH_TOKEN_HEADER, token));
+        List<UserResponse> list = responseFromJson(result, new TypeReference<List<UserResponse>>() {
+        });
+
+        //then
+        result.andExpect(status().isOk());
+        assertThat(list.contains(fromEntity(user1))).isTrue();
+        assertThat(list.contains(fromEntity(user2))).isFalse();
+        assertThat(list.contains(fromEntity(logged))).isFalse();
+        assertThat(list).hasSize(1);
+    }
+
+    @Test()
     public void searchSuccessNullName() throws Exception {
         //given
         UserEntity notFound = registerUser("Username", "email", PASSWORD);
