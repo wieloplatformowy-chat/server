@@ -35,6 +35,7 @@ public class FriendService {
             throw new AlreadyAFriendException("User with id: " + friendId + " has been added as friend before.");
 
         friendDao.addFriend(loggedUser, friend);
+        friendDao.addFriend(friend, loggedUser);
     }
 
     @Transactional

@@ -79,6 +79,7 @@ public class FriendRestControllerTest extends BaseRestControllerTest {
         //then
         result.andExpect(status().isOk());
         assertThat(friendService.isMyFriend(user)).isTrue();
+        assertThat(friendDao.isFriend(user, logged)).isTrue();
     }
 
     @Test
@@ -116,12 +117,12 @@ public class FriendRestControllerTest extends BaseRestControllerTest {
     }
 
     @Test()
-    public void searchInvalidAndNoAuthHeader() throws Exception {
+    public void myInvalidAndNoAuthHeader() throws Exception {
         testInvalidAndNullToken(get("/friends/my"));
     }
 
     @Test()
-    public void searchSuccess() throws Exception {
+    public void mySuccess() throws Exception {
         //given
         UserEntity friend1 = registerUser("Friend1", EMAIL, PASSWORD);
         UserEntity friend2 = registerUser("Friend2", EMAIL, PASSWORD);
@@ -152,7 +153,7 @@ public class FriendRestControllerTest extends BaseRestControllerTest {
     }
 
     @Test()
-    public void searchSuccessEmpty() throws Exception {
+    public void mySuccessEmpty() throws Exception {
         //given
         UserEntity notMyFriend1 = registerUser("Friend1", EMAIL, PASSWORD);
         UserEntity notMyFriend2 = registerUser("Friend2", EMAIL, PASSWORD);
