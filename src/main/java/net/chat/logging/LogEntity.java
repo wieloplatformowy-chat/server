@@ -27,6 +27,7 @@ public class LogEntity implements Serializable {
 
     private String userIp;
 
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private LogPriority priority;
