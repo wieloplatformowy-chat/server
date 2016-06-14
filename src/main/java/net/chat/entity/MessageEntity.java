@@ -27,11 +27,11 @@ public class MessageEntity implements Serializable {
     private Long id;
 
     @NotNull
+    @Column(columnDefinition = "timestamp")
     private Timestamp date;
 
     @NotNull
     @Column(columnDefinition = "mediumtext")
-//    @Temporal(TemporalType.TIMESTAMP)
     private String message;
 
     @NotNull
