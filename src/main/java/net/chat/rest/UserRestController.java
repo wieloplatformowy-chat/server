@@ -78,29 +78,7 @@ public class UserRestController extends RestExceptionHandler {
         UserEntity user = registerParams.toUserWithNullId();
         logger.debug("registering user: " + user);
         userService.register(user);
-        return RestResponse.with("User registered successfully." + registerParams.email);
-    }
-
-    @RequestMapping(path = "/register2", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    @ApiOperation(value = "Register user")
-    @ApiResponses({
-            @ApiResponse(code = 400, message = "Failure", response = ResponseError.class)})
-    public RestResponse register2(@RequestBody RegisterParams registerParams) {
-        UserEntity user = registerParams.toUserWithNullId();
-        logger.debug("registering user: " + user);
-        userService.register(user);
-        return RestResponse.with("User registered successfully." + registerParams.email);
-    }
-
-    @RequestMapping(path = "/register3", method = RequestMethod.POST, produces = "application/json", consumes = "application/json;charset=UTF-8")
-    @ApiOperation(value = "Register user")
-    @ApiResponses({
-            @ApiResponse(code = 400, message = "Failure", response = ResponseError.class)})
-    public RestResponse register3(@RequestBody RegisterParams registerParams) {
-        UserEntity user = registerParams.toUserWithNullId();
-        logger.debug("registering user: " + user);
-        userService.register(user);
-        return RestResponse.with("User registered successfully." + registerParams.email);
+        return RestResponse.with("User registered successfully.");
     }
 
     @ApiIgnore
