@@ -11,12 +11,12 @@ import net.chat.rest.dto.UserResponse;
 import net.chat.rest.message.ResponseError;
 import net.chat.rest.message.RestResponse;
 import net.chat.service.FriendService;
+import net.chat.service.OnlineService;
 import net.chat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Mariusz Gorzycki
@@ -37,6 +37,9 @@ public class FriendRestController extends RestExceptionHandler {
 
     @Autowired
     TokenService tokenService;
+
+    @Autowired
+    OnlineService onlineService;
 
     @RequestMapping(path = "/add/{id}", method = RequestMethod.POST, produces = "application/json")
     @ApiImplicitParam(name = "X-Auth-Token", value = "Authorization token", dataType = "string", paramType = "header")
@@ -82,9 +85,11 @@ public class FriendRestController extends RestExceptionHandler {
             @ApiResponse(code = 401, message = "Unauthorized")})
     public OnlineResponse online(@PathVariable Long id) {
         logger.debug("check online: : " + id);
-
         userService.throwIfNotLoggedIn();
 
-        return new OnlineResponse().setOnline(new Random().nextBoolean());
+        onlineService.markMeOnline();
+        boolean online = onlineService.isOnline(id);
+
+        return new OnlineResponse().setOnline(online);
     }
 }

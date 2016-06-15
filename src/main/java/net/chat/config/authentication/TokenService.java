@@ -16,17 +16,11 @@ import java.util.UUID;
 @Service
 public class TokenService {
     private static final Ehcache restApiAuthTokenCache;
-    public static final int HALF_AN_HOUR_IN_MILLISECONDS = 30 * 60 * 1000;
 
     static {
         CacheManager.getInstance().addCache("restApiAuthTokenCache");
         restApiAuthTokenCache = CacheManager.getInstance().getEhcache("restApiAuthTokenCache");
     }
-
-//    @Scheduled(fixedRate = HALF_AN_HOUR_IN_MILLISECONDS)
-//    public void evictExpiredTokens() {
-//        restApiAuthTokenCache.evictExpiredElements();
-//    }
 
     public String generateNewToken() {
         return UUID.randomUUID().toString();
