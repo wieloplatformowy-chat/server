@@ -184,6 +184,7 @@ public class FriendRestControllerTest extends BaseRestControllerTest {
         String token = userService.login(logged);
         UserEntity friend = registerUser(FRIEND_NAME, EMAIL, PASSWORD);
         friendDao.addFriend(logged, friend);
+        friendDao.addFriend(friend, logged);
         Long id = friend.getId();
 
         //when
@@ -192,6 +193,7 @@ public class FriendRestControllerTest extends BaseRestControllerTest {
         //then
         result.andExpect(status().isOk());
         assertThat(friendService.isMyFriend(friend)).isFalse();
+        assertThat(friendDao.isFriend(friend, logged)).isFalse();
     }
 
     @Test

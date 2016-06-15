@@ -47,6 +47,7 @@ public class FriendService {
             throw new NotAFriendException("User with id: " + friendId + " is not your friend.");
 
         friendDao.deleteFriend(loggedUser, friend);
+        friendDao.deleteFriend(friend, loggedUser);
     }
 
     @Transactional
